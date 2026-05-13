@@ -382,7 +382,7 @@ export const addFarmerRelease = (data) => {
   return agricultureRequest({
     url: '/invested/release/farmer/add',
     method: 'post',
-    data
+    data,
   })
 }
 
@@ -390,11 +390,12 @@ export const addFarmerRelease = (data) => {
  * 编辑农民分发单
  * Edit farmer release
  */
-export const editFarmerRelease = (data) => {
+export const editFarmerRelease = (data, flag) => {
   return agricultureRequest({
     url: '/invested/release/farmer/edit',
     method: 'post',
-    data
+    data,
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -402,10 +403,11 @@ export const editFarmerRelease = (data) => {
  * 获取农民分发单详情
  * Get farmer release detail
  */
-export const getFarmerReleaseDetail = (id) => {
+export const getFarmerReleaseDetail = (id, flag) => {
   return agricultureRequest({
     url: `/invested/release/farmer/detail/${id}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -413,10 +415,11 @@ export const getFarmerReleaseDetail = (id) => {
  * 删除农民分发单
  * Delete farmer release
  */
-export const deleteFarmerRelease = (ids) => {
+export const deleteFarmerRelease = (ids, flag) => {
   return agricultureRequest({
     url: `/invested/release/farmer/delete/${ids}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 

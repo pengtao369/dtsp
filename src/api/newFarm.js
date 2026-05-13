@@ -155,7 +155,8 @@ export const getFarmerList = async (params = {}) => {
       kebeleCode: params.kebeleCode || '',
       daId: params.daId || '',
       searchValue: params.searchValue || '',
-      kebeleName: params.kebeleName || ''
+      kebeleName: params.kebeleName || '',
+      ...(params.flag === undefined ? {} : { flag: params.flag })
     }
   })
   return {

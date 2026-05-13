@@ -242,6 +242,8 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const useKebeleFlag = computed(() => route.query.source === 'kebele-farmer')
+const requestFlag = computed(() => (useKebeleFlag.value ? 1 : undefined))
 
 const loading = ref(false)
 const formRef = ref(null)
@@ -306,7 +308,7 @@ const rules = {
 // 获取农民列表
 const fetchFarmerList = async () => {
   try {
-    const response = await getFarmerList({ pageNum: 1, pageSize: 10000 })
+    const response = await getFarmerList({ pageNum: 1, pageSize: 10000, ...(useKebeleFlag.value ? { flag: 1 } : {}) })
     if (response.code === 200 && response.data && response.data.records) {
       farmerList.value = response.data.records
     }
@@ -321,7 +323,8 @@ const loadDemandList = async (farmerId) => {
   demandLoading.value = true
   try {
     const response = await getFarmerDemandByFarmerId(farmerId, {
-      year: formData.releaseYear || new Date().getFullYear().toString()
+      year: formData.releaseYear || new Date().getFullYear().toString(),
+      ...(useKebeleFlag.value ? { flag: 1 } : {})
     })
     if (response.code === 200) {
       demandList.value = response.data || []
@@ -431,7 +434,8 @@ const loadVarietyOptions = async (detail, preserveSelection = false) => {
       pageSize: 1000,
       mainCategory: getMainCategoryLabel(detail.inputType),
       subCategory: getSubCategoryLabel(detail.inputCategory),
-      status: '0'
+      status: '0',
+      ...(useKebeleFlag.value ? { flag: 1 } : {})
     })
 
     const list = response.data?.list || []
@@ -534,7 +538,7 @@ const fetchStock = async (index) => {
     const inputTypeLabel = getMainCategoryLabel(detail.inputType)
     const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
 
-    const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+    const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, requestFlag.value)
     if (res.code === 200 && Array.isArray(res.data)) {
       const matched = findMatchedStockItem(res.data, inputTypeLabel, inputCategoryLabel, detail.variety)
       detail.currentStock = matched?.availableQty ?? 0
@@ -592,7 +596,7 @@ const validateQuantity = async (index) => {
     const inputTypeLabel = getMainCategoryLabel(detail.inputType)
     const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
 
-    const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+    const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, requestFlag.value)
     if (stockRes.code === 200 && Array.isArray(stockRes.data)) {
       const matched = findMatchedStockItem(stockRes.data, inputTypeLabel, inputCategoryLabel, detail.variety)
       const available = matched?.availableQty ?? 0
@@ -621,7 +625,7 @@ const calculateTotalPrice = (index) => {
 const fetchDetail = async () => {
   loading.value = true
   try {
-    const response = await getFarmerReleaseDetail(route.params.id)
+    const response = await getFarmerReleaseDetail(route.params.id, requestFlag.value)
     if (response.code === 200 && response.data) {
       Object.assign(formData, response.data.main)
       if (formData.releaseYear) {
@@ -741,7 +745,7 @@ const handleSubmit = async () => {
 
         const inputTypeLabel = getMainCategoryLabel(item.inputType)
         const inputCategoryLabel = getSubCategoryLabel(item.inputCategory)
-        const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, item.variety)
+        const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, item.variety, requestFlag.value)
         if (stockRes.code === 200 && Array.isArray(stockRes.data)) {
           const matched = findMatchedStockItem(stockRes.data, inputTypeLabel, inputCategoryLabel, item.variety)
           const available = matched?.availableQty ?? 0
@@ -763,7 +767,7 @@ const handleSubmit = async () => {
       }
 
       const apiFunc = isEdit.value ? editFarmerRelease : addFarmerRelease
-      const response = await apiFunc(submitData)
+      const response = await apiFunc(submitData, requestFlag.value)
       if (response.code === 200) {
         ElMessage.success(t('common.saveSuccess'))
         router.back()
@@ -858,9 +862,9 @@ const handleAction = (action) => {
 const loadCategoryOptions = async () => {
   try {
     const [mainRes, subRes, unitRes] = await Promise.all([
-      getDicts('inventory_main_category'),
-      getDicts('inventory_sub_category'),
-      getDicts('inventory_unit_new')
+      getDicts('inventory_main_category', requestFlag.value),
+      getDicts('inventory_sub_category', requestFlag.value),
+      getDicts('inventory_unit_new', requestFlag.value)
     ])
 
     mainCategoryOptions.value = (mainRes.data || []).map(item => ({
