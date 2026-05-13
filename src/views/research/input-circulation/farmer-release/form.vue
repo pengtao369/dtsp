@@ -682,7 +682,7 @@ const addDetail = () => {
     totalPrice: 0,
     maxQuantity: null,
     currentStock: 0,
-    releaseTime: new Date().toISOString(),
+    releaseTime: formatDateTime(new Date()),
     outWarehouseCode: '',
     outWarehouseName: '',
     inWarehouseCode: '',
@@ -762,7 +762,8 @@ const handleSubmit = async () => {
         releaseYear: formData.releaseYear ? parseInt(formData.releaseYear, 10) : null,
         releaseDate: formData.releaseDate,
         details: formData.details.map(({ varietyOptions, varietyLoading, ...detail }) => ({
-          ...detail
+          ...detail,
+          releaseTime: formatDateTime(detail.releaseTime)
         }))
       }
 
