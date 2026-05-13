@@ -93,6 +93,7 @@ export const createOpenOutbound = (data) => {
   return agricultureRequest({
     url: '/inventory/open/outbound',
     method: 'post',
+    params: data?.flag === undefined ? undefined : { flag: data.flag },
     data
   })
 }

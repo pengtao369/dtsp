@@ -31,10 +31,10 @@
               <el-descriptions-item :label="$t('inputCirculation.releaseName')">
                 {{ detailData.main?.releaseName || '-' }}
               </el-descriptions-item>
-              <el-descriptions-item :label="$t('inputCirculation.unionId')">
+              <el-descriptions-item :label="$t(targetLabelKey)">
                 {{ detailData.main?.targetId || '-' }}
               </el-descriptions-item>
-              <el-descriptions-item :label="$t('inputCirculation.unionContact')">
+              <el-descriptions-item :label="$t(targetContactLabelKey)">
                 {{ detailData.main?.targetContact || '-' }}
               </el-descriptions-item>
               <el-descriptions-item :label="$t('inputCirculation.releaseDate')">
@@ -149,6 +149,8 @@ const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
 const zoneWoredaFlag = computed(() => (route.query.from === 'zone-woreda' ? 1 : undefined))
+const targetLabelKey = computed(() => zoneWoredaFlag.value ? 'inputCirculation.woredaId' : 'inputCirculation.unionId')
+const targetContactLabelKey = computed(() => zoneWoredaFlag.value ? 'inputCirculation.woredaContact' : 'inputCirculation.unionContact')
 const detailData = ref({ main: {}, details: [] })
 const demandList = ref([])
 const demandLoading = ref(false)

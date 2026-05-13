@@ -39,19 +39,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.unionId')" prop="targetId">
+                  <el-form-item :label="$t(targetLabelKey)" prop="targetId">
                     <el-select v-model="selectedUnionOrgName" :placeholder="$t('common.pleaseSelect')" @change="getUnionInfo" style="width: 100%">
                       <el-option v-for="item in unionList" :key="item.code" :label="item.name" :value="item.code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.unionAddress')">
+                  <el-form-item :label="$t(targetAddressLabelKey)">
                     <el-input v-model="formData.targetAddress" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.unionContact')">
+                  <el-form-item :label="$t(targetContactLabelKey)">
                     <el-input v-model="formData.targetContact" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
@@ -246,7 +246,7 @@ import { getInventoryWarehouseList } from '@/api/inventory'
 import { getAllInputList } from '@/api/input.js'
 import { listProductManage } from '@/api/productManage'
 import { getUnionDetailByUnionId } from '@/api/union.js'
-import { getOrgansRegionByCode, listSubRegionByCode } from '@/api/application.js'
+import { listSubRegionByCode } from '@/api/application.js'
 import { getCurrentUserInfo } from '@/api/user.js'
 import { getTownAggregationDetail } from '@/api/villageAggregation.js'
 import { getRegistrationList } from '@/api/orgRegistration'
@@ -259,6 +259,9 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 const zoneWoredaFlag = computed(() => (route.query.from === 'zone-woreda' ? 1 : undefined))
+const targetLabelKey = computed(() => zoneWoredaFlag.value ? 'inputCirculation.woredaId' : 'inputCirculation.unionId')
+const targetAddressLabelKey = computed(() => zoneWoredaFlag.value ? 'inputCirculation.woredaAddress' : 'inputCirculation.unionAddress')
+const targetContactLabelKey = computed(() => zoneWoredaFlag.value ? 'inputCirculation.woredaContact' : 'inputCirculation.unionContact')
 
 const loading = ref(false)
 const formRef = ref(null)
@@ -588,6 +591,30 @@ const getAllUnionList = async (value, resetSelection = true) => {
     clearInWarehouseSelection()
   }
   try {
+    if (zoneWoredaFlag.value) {
+      const response = await listSubRegionByCode({
+        regionCode: value,
+        flag: zoneWoredaFlag.value
+      })
+      if (response.code === 200) {
+        const list = response.data || []
+        unionList.value = list.map(item => ({
+          id: item.code,
+          orgName: item.name,
+          code: item.code,
+          name: item.name
+        }))
+        if (!resetSelection && formData.targetId) {
+          const matched = unionList.value.find(item => String(item.id) === String(formData.targetId) || String(item.code) === String(formData.targetId))
+          if (matched) {
+            selectedUnionOrgName.value = matched.code
+            formData.targetId = matched.id
+          }
+        }
+      }
+      return
+    }
+
     const response = await getRegistrationList({
       regionCode: value,
       orgType: 'UNION',
@@ -614,7 +641,7 @@ const getAllUnionList = async (value, resetSelection = true) => {
       }
     }
   } catch (error) {
-    ElMessage.error(t('inputCirculation.queryUnionListFailed'))
+    ElMessage.error(t(zoneWoredaFlag.value ? 'inputCirculation.queryWoredaListFailed' : 'inputCirculation.queryUnionListFailed'))
   } finally {
     loading.value = false
   }
@@ -929,6 +956,17 @@ const getUnionInfo = async (value) => {
   try {
     const selectedUnion = unionList.value.find(item => String(item.orgName) === String(value) || String(item.code) === String(value))
     const unionId = selectedUnion?.id || value
+
+    if (zoneWoredaFlag.value) {
+      formData.targetId = selectedUnion?.id || value
+      selectedUnionOrgName.value = selectedUnion?.code || value
+      formData.targetAddress = selectedUnion?.name || ''
+      formData.targetContact = ''
+      clearInWarehouseSelection()
+      await loadDemandList(regionCode.value)
+      return
+    }
+
     formData.targetId = selectedUnion?.id || ''
     selectedUnionOrgName.value = selectedUnion?.orgName || value
 
@@ -941,7 +979,7 @@ const getUnionInfo = async (value) => {
     // 加载需求列表
     await loadDemandList(regionCode.value)
   } catch (error) {
-    ElMessage.error(t('union.getUnionInfoFailed'))
+    ElMessage.error(t(zoneWoredaFlag.value ? 'inputCirculation.getWoredaInfoFailed' : 'union.getUnionInfoFailed'))
   } finally {
     loading.value = false
   }
@@ -1159,4 +1197,3 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @use '@/assets/styles/page-common.scss';
 </style>
-

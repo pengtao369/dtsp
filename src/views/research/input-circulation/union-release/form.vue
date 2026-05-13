@@ -39,19 +39,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.targetId')" prop="targetId">
+                  <el-form-item :label="$t('inputCirculation.targetKebele')" prop="targetId">
                     <el-select v-model="formData.targetId" :placeholder="$t('common.pleaseSelect')" @change="getCoorInfo" style="width: 100%">
                       <el-option v-for="item in coorList" :key="item.code" :label="item.name" :value="item.code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.targetAddress')">
+                  <el-form-item :label="$t('inputCirculation.kebeleAddress')">
                     <el-input v-model="formData.targetAddress" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.targetContact')">
+                  <el-form-item :label="$t('inputCirculation.kebeleContact')">
                     <el-input v-model="formData.targetContact" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
@@ -253,10 +253,8 @@ import { ElMessage } from 'element-plus'
 import { getUnionReleaseDetail, addUnionRelease, editUnionRelease, getAvailableStock, getDeptCategoryStock } from '@/api/inputCirculation'
 import { getInventoryWarehouseList } from '@/api/inventory'
 import { listProductManage } from '@/api/productManage'
-import { getRegistrationList } from '@/api/orgRegistration'
-import { getUnionDetailByUnionId } from '@/api/union'
 import { getCurrentUserInfo } from '@/api/user'
-import { getOrgansRegionByCode, listSubRegionByCode } from '@/api/application'
+import { listSubRegionByCode } from '@/api/application'
 import { getTownAggregationDetail } from '@/api/villageAggregation'
 import { getDicts } from '@/api/system/dict'
 import { parseI18nValue } from '@/utils/i18nHelper'
@@ -614,19 +612,21 @@ const handleYearChange = () => {
 
 const getCoorInfo = async (value) => {
   if (!value || value.length === 0) {
+    formData.targetAddress = ''
+    formData.targetContact = ''
+    formData.targetPhone = ''
     clearInWarehouseSelection()
     return
   }
   loading.value = true
   try {
-    const response = await getUnionDetailByUnionId(value)
-    if (response.code === 200 && response.data) {
-      formData.targetAddress = response.data.baseInfo?.fullAddress || response.data.fullAddress
-      formData.targetContact = response.data.baseInfo?.contactName || response.data.operator
-    }
-    await loadInWarehousesByCooperative(value)
+    const selectedKebele = coorList.value.find(item => String(item.code) === String(value))
+    formData.targetAddress = selectedKebele?.name || ''
+    formData.targetContact = ''
+    formData.targetPhone = ''
+    clearInWarehouseSelection()
   } catch (error) {
-    ElMessage.error(t('union.getUnionInfoFailed'))
+    ElMessage.error(t('inputCirculation.getKebeleInfoFailed'))
   } finally {
     loading.value = false
   }
@@ -1000,7 +1000,7 @@ const handleSubmit = async () => {
       }
 
       const apiFunc = isEdit.value ? editUnionRelease : addUnionRelease
-      const submitData = { ...formData }
+      const submitData = { ...formData, flag: 1 }
       submitData.details = formData.details.map(({ varietyOptions, varietyLoading, ...detail }) => ({ ...detail }))
       const response = await apiFunc(submitData)
       if (response.code === 200) {
@@ -1023,23 +1023,16 @@ const getAllCoopList = async (value) => {
   loading.value = true
   regionCode.value = value
   try {
-    const response = await getRegistrationList({
-      regionCode: value,
-      orgType: 'COOPERATIVE',
-      auditStatus: 1,
-      page: 1,
-      pageSize: 10000
-    })
-    console.log('Cooperative List Response:', response)
+    const response = await listSubRegionByCode({ regionCode: value })
     if (response.code === 200) {
-      const list = response.data.records || response.data.rows || response.data.list || []
+      const list = response.data || []
       coorList.value = list.map(item => ({
-        code: item.id,
-        name: item.orgName
+        code: item.code,
+        name: item.name
       }))
     }
   } catch (error) {
-    ElMessage.error(t('inputCirculation.queryCoorListFailed'))
+    ElMessage.error(t('inputCirculation.queryKebeleListFailed'))
   } finally {
     loading.value = false
   }
@@ -1093,4 +1086,3 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @use '@/assets/styles/page-common.scss';
 </style>
-

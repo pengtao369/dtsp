@@ -50,7 +50,7 @@
               <el-table-column type="selection" width="50" />
               <el-table-column prop="releaseId" :label="$t('inputCirculation.releaseId')" min-width="150" show-overflow-tooltip />
               <el-table-column prop="releaseName" :label="$t('inputCirculation.releaseName')" min-width="180" show-overflow-tooltip />
-              <el-table-column prop="targetId" :label="$t('inputCirculation.targetWoreda')" min-width="150" show-overflow-tooltip />
+              <el-table-column prop="targetId" :label="$t('inputCirculation.targetKebele')" min-width="150" show-overflow-tooltip />
               <el-table-column prop="releaseDate" :label="$t('inputCirculation.releaseDate')" width="180">
                 <template #default="{ row }">
                   {{ formatDateTime(row.releaseDate) }}
@@ -106,7 +106,7 @@
                 <span class="value">{{ item.releaseId }}</span>
               </div>
               <div class="mobile-card-row">
-                <span class="label">{{ $t('inputCirculation.targetWoreda') }}:</span>
+                <span class="label">{{ $t('inputCirculation.targetKebele') }}:</span>
                 <span class="value">{{ item.targetId }}</span>
               </div>
               <div class="mobile-card-row">

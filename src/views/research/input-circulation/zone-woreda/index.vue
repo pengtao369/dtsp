@@ -4,8 +4,8 @@
       <!-- 页面头部 -->
       <PageHeader
         icon="ri-file-transfer-line"
-        :title="$t('inputCirculation.oseReleaseToUnion')"
-        :subtitle="$t('inputCirculation.oseReleaseToUnion')" />
+        :title="$t('inputCirculation.oseReleaseToWoreda')"
+        :subtitle="$t('inputCirculation.oseReleaseToWoreda')" />
 
       <!-- 内容区域 -->
       <div class="content-wrapper">
@@ -36,7 +36,7 @@
         </div>
 
         <!-- 列表卡片 -->
-        <InfoCard :title="$t('inputCirculation.oseReleaseToUnion')" icon="ri-file-list-3-line">
+        <InfoCard :title="$t('inputCirculation.oseReleaseToWoreda')" icon="ri-file-list-3-line">
           <template #actions>
             <el-button type="primary" @click="handleAdd">
               <i class="ri-add-line"></i>
@@ -50,8 +50,8 @@
               <el-table-column type="selection" width="50" />
               <el-table-column prop="releaseId" :label="$t('inputCirculation.releaseId')" min-width="150" show-overflow-tooltip />
               <el-table-column prop="releaseName" :label="$t('inputCirculation.releaseName')" min-width="200" show-overflow-tooltip />
-              <el-table-column prop="targetId" :label="$t('inputCirculation.unionId')" min-width="150" show-overflow-tooltip />
-              <el-table-column prop="targetContact" :label="$t('inputCirculation.unionContact')" min-width="160" show-overflow-tooltip />
+              <el-table-column prop="targetId" :label="$t('inputCirculation.woredaId')" min-width="150" show-overflow-tooltip />
+              <el-table-column prop="targetContact" :label="$t('inputCirculation.woredaContact')" min-width="160" show-overflow-tooltip />
               <el-table-column prop="releaseDate" :label="$t('inputCirculation.releaseDate')" min-width="160" />
               <el-table-column prop="status" :label="$t('inputCirculation.status')" min-width="120" />
               <el-table-column :label="$t('inputCirculation.stockStatus')" min-width="140">
@@ -104,11 +104,11 @@
                 <span class="value">{{ item.releaseId }}</span>
               </div>
               <div class="mobile-card-row">
-                <span class="label">{{ $t('inputCirculation.unionId') }}:</span>
+                <span class="label">{{ $t('inputCirculation.woredaId') }}:</span>
                 <span class="value">{{ item.targetId }}</span>
               </div>
               <div class="mobile-card-row">
-                <span class="label">{{ $t('inputCirculation.unionContact') }}:</span>
+                <span class="label">{{ $t('inputCirculation.woredaContact') }}:</span>
                 <span class="value">{{ item.targetContact }}</span>
               </div>
               <div class="mobile-card-row">

@@ -210,7 +210,7 @@ const loadDemandListByReleaseId = async (releaseId) => {
   demandLoading.value = true
   try {
     // 先获取分发单详情来获取 zoneId
-    const releaseResponse = await getOseReleaseDetailByReleaseId(releaseId)
+    const releaseResponse = await getOseReleaseDetailByReleaseId(releaseId, 1)
     const releaseMain = releaseResponse.data?.main || {}
     const regionCode = releaseMain.zoneId || releaseMain.zone_id
     const year = releaseMain.releaseYear || releaseMain.release_year || new Date().getFullYear().toString()

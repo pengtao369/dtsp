@@ -141,8 +141,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getWoredaReceiveList, confirmWoredaReceive, getUnionReleaseDetailByReleaseId } from '@/api/inputCirculation'
-import { createOpenInbound, createOpenOutbound } from '@/api/inventory'
+import { getWoredaReceiveList, confirmWoredaReceive } from '@/api/inputCirculation'
 import { PageHeader, InfoCard, SearchForm, SearchItem } from '@/components/common'
 import StatusTabs from '@/components/workflow/StatusTabs.vue'
 import ActionButtons from '@/components/workflow/ActionButtons.vue'
@@ -232,37 +231,6 @@ const handleView = (row) => {
   router.push(`/input/input-circulation/woreda-receive/detail/${row.id}`)
 }
 
-const formatDateTime = (date) => {
-  const pad = (num) => String(num).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-}
-
-const generateBatchNo = () => {
-  const rand = Math.random().toString(36).slice(2, 8).toUpperCase()
-  return `BATCH-${Date.now()}-${rand}`
-}
-
-const normalizeReleaseDetails = (list) => {
-  if (!Array.isArray(list)) return []
-  return list.map(item => ({
-    ...item,
-    productId: item.productId ?? item.product_id ?? null,
-    inputType: item.inputType ?? item.input_type,
-    inputCategory: item.inputCategory ?? item.input_category,
-    quantity: item.quantity ?? item.qty ?? 0,
-    outWarehouseCode: item.outWarehouseCode ?? item.out_warehouse_code,
-    inWarehouseCode: item.inWarehouseCode ?? item.in_warehouse_code
-  }))
-}
-
-const ensureSingleWarehouseCode = (details, field, label) => {
-  const codes = [...new Set(details.map(item => item[field]).filter(Boolean))]
-  if (codes.length !== 1) {
-    throw new Error(`${label} must be the same in all details.`)
-  }
-  return codes[0]
-}
-
 const handleConfirm = async (row) => {
   ElMessageBox.confirm(
     'Are you sure you want to confirm receipt of this distribution?',
@@ -285,68 +253,6 @@ const handleConfirm = async (row) => {
         const user = userInfo.user || userInfo
         confirmBy = user.REALNAME || user.USERNAME || user.realName || user.username || ''
         confirmOrg = user.ORGANNAME || user.organName || ''
-      }
-
-      const releaseId = row.releaseId || row.release_id
-      if (!releaseId) {
-        throw new Error('Release ID is missing.')
-      }
-
-      const releaseRes = await getUnionReleaseDetailByReleaseId(releaseId, 1)
-      if (releaseRes.code !== 200) {
-        throw new Error(releaseRes.msg || 'Failed to load release detail.')
-      }
-
-      const releaseData = releaseRes.data || {}
-      const rawDetails = releaseData.details || releaseData.detailList || []
-      const releaseDetails = normalizeReleaseDetails(rawDetails)
-      if (!releaseDetails.length) {
-        throw new Error('Release details are empty.')
-      }
-
-      const outWarehouseCode = ensureSingleWarehouseCode(releaseDetails, 'outWarehouseCode', 'Out warehouse')
-      const inWarehouseCode = ensureSingleWarehouseCode(releaseDetails, 'inWarehouseCode', 'In warehouse')
-
-      const now = formatDateTime(new Date())
-      const detailList = releaseDetails.map(item => ({
-        productId: item.productId || null,
-        mainCategory: item.inputType,
-        subCategory: item.inputCategory,
-        batchNo: generateBatchNo(),
-        qty: item.quantity,
-        unit: 'KG'
-      }))
-
-      const outboundPayload = {
-        outboundNo: `OUT-${releaseId}-${Date.now()}`,
-        warehouseCode: outWarehouseCode,
-        type: 'GENERAL',
-        operator: confirmBy,
-        orderDate: now,
-        bizNo: String(releaseId),
-        flag: 1,
-        detailList
-      }
-
-      const inboundPayload = {
-        inboundNo: `IN-${releaseId}-${Date.now()}`,
-        warehouseCode: inWarehouseCode,
-        type: 'GENERAL',
-        operator: confirmBy,
-        orderDate: now,
-        bizNo: String(releaseId),
-        flag: 1,
-        detailList
-      }
-
-      const outboundRes = await createOpenOutbound(outboundPayload)
-      if (outboundRes.code !== 200) {
-        throw new Error(outboundRes.msg || 'Failed to create outbound order.')
-      }
-
-      const inboundRes = await createOpenInbound(inboundPayload)
-      if (inboundRes.code !== 200) {
-        throw new Error(inboundRes.msg || 'Failed to create inbound order.')
       }
 
       const response = await confirmWoredaReceive(row.id, confirmBy, confirmOrg, 1)
