@@ -62,6 +62,9 @@ export const getInventoryWarehouseList = (params = {}) => {
   if (params.org_name !== undefined && params.org_name !== null && params.org_name !== '') {
     requestParams.org_name = params.org_name
   }
+  if (params.flag !== undefined && params.flag !== null && params.flag !== '') {
+    requestParams.flag = params.flag
+  }
 
   return agricultureRequest({
     url: '/inventory/inventory-warehouse/list',

@@ -48,10 +48,11 @@ export const getInputList = (params = {}) => {
  * 获取全部投入品列表（不分页）
  * 后端：GET /agriculture/input/getAllInputList
  */
-export const getAllInputList = () => {
+export const getAllInputList = (flag) => {
   return request({
     url: '/agriculture/input/getAllInputList',
     method: 'get',
+    params: flag === undefined ? undefined : { flag },
     headers: getAuthHeaders()
   })
 }

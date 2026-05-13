@@ -29,6 +29,7 @@ export const listProductManage = (params = {}) => {
   if (params.brand) requestParams.brand = params.brand
   if (params.status) requestParams.status = params.status
   if (params.keyword) requestParams.keyword = params.keyword
+  if (params.flag !== undefined && params.flag !== null && params.flag !== '') requestParams.flag = params.flag
 
   return agricultureRequest({
     url: '/inventory/product-manage/list',

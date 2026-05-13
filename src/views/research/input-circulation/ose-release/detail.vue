@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
@@ -148,6 +148,7 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
+const zoneWoredaFlag = computed(() => (route.query.from === 'zone-woreda' ? 1 : undefined))
 const detailData = ref({ main: {}, details: [] })
 const demandList = ref([])
 const demandLoading = ref(false)
@@ -181,9 +182,9 @@ const formatSeason = (season) => {
 const loadCategoryOptions = async () => {
   try {
     const [mainRes, subRes, unitRes] = await Promise.all([
-      getDicts('inventory_main_category'),
-      getDicts('inventory_sub_category'),
-      getDicts('inventory_unit_new')
+      getDicts('inventory_main_category', zoneWoredaFlag.value),
+      getDicts('inventory_sub_category', zoneWoredaFlag.value),
+      getDicts('inventory_unit_new', zoneWoredaFlag.value)
     ])
 
     mainCategoryOptions.value = (mainRes.data || []).map(item => ({
@@ -215,7 +216,7 @@ const getUnitLabel = (value) => {
 const fetchDetail = async () => {
   loading.value = true
   try {
-    const response = await getOseReleaseDetail(route.params.id)
+    const response = await getOseReleaseDetail(route.params.id, zoneWoredaFlag.value)
     if (response.code === 200) {
       const data = response.data || {}
       const rawDetails = data.details || data.detailList || []
@@ -288,7 +289,7 @@ const fetchCurrentStock = async () => {
     try {
       const inputTypeLabel = getMainCategoryLabel(detail.inputType)
       const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
-      const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+      const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, zoneWoredaFlag.value)
       if (res.code === 200 && Array.isArray(res.data)) {
         const matched = findMatchedStockItem(res.data, inputTypeLabel, inputCategoryLabel, detail.variety)
         return { ...detail, currentStock: matched?.availableQty ?? 0 }
@@ -307,7 +308,11 @@ const loadDemandList = async (regionCode) => {
   demandLoading.value = true
   try {
     const year = detailData.value.main?.releaseYear || detailData.value.main?.release_year || new Date().getFullYear().toString()
-    const response = await getTownAggregationDetail({ sourceCode: regionCode, year })
+    const response = await getTownAggregationDetail({
+      sourceCode: regionCode,
+      year,
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
+    })
     if (response.code === 200) {
       demandList.value = response.data || []
     }

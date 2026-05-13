@@ -258,6 +258,7 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const zoneWoredaFlag = computed(() => (route.query.from === 'zone-woreda' ? 1 : undefined))
 
 const loading = ref(false)
 const formRef = ref(null)
@@ -403,7 +404,7 @@ const rules = {
 const getUserInfo = async () => {
   loading.value = true
   try {
-    const response = await getCurrentUserInfo()
+    const response = await getCurrentUserInfo(zoneWoredaFlag.value)
     if (response.code === 200 && response.data) {
       console.log(response.data)
      formData.releaseBy = response.data.user.name
@@ -420,7 +421,10 @@ const getUserInfo = async () => {
 const getAllZoneList = async () => {
   loading.value = true
   try {
-    const response = await listSubRegionByCode({regionCode: '000000000000'})
+    const response = await listSubRegionByCode({
+      regionCode: '000000000000',
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
+    })
     if (response.code === 200) {
       zoneList.value = response.data
     }
@@ -477,7 +481,8 @@ const loadWarehouses = async () => {
       pageNum: 1,
       pageSize: 10000,
       orgId: currentUserOrgId,
-      org_id: currentUserOrgId
+      org_id: currentUserOrgId,
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
     })
 
     const warehouseList = res.rows || []
@@ -518,7 +523,8 @@ const loadInWarehousesByUnion = async (unionOrgName) => {
       pageSize: 10000,
       status: '0',
       orgName: unionOrgName,
-      org_name: unionOrgName
+      org_name: unionOrgName,
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
     })
     inWarehouseOptions.value = res.rows || []
     formData.details.forEach(detail => {
@@ -537,9 +543,9 @@ const loadInWarehousesByUnion = async (unionOrgName) => {
 const loadCategoryOptions = async () => {
   try {
     const [mainRes, subRes, unitRes] = await Promise.all([
-      getDicts('inventory_main_category'),
-      getDicts('inventory_sub_category'),
-      getDicts('inventory_unit_new')
+      getDicts('inventory_main_category', zoneWoredaFlag.value),
+      getDicts('inventory_sub_category', zoneWoredaFlag.value),
+      getDicts('inventory_unit_new', zoneWoredaFlag.value)
     ])
 
     mainCategoryOptions.value = (mainRes.data || []).map(item => ({
@@ -587,7 +593,8 @@ const getAllUnionList = async (value, resetSelection = true) => {
       orgType: 'UNION',
       auditStatus: 1,
       page: 1,
-      pageSize: 10000
+      pageSize: 10000,
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
     })
     console.log('Union List Response:', response)
     if (response.code === 200) {
@@ -616,7 +623,7 @@ const getAllUnionList = async (value, resetSelection = true) => {
 const getInputList = async () => {
   loading.value = true
   try {
-    const response = await getAllInputList()
+    const response = await getAllInputList(zoneWoredaFlag.value)
     if (response.code === 200) {
       inputList.value = response.data.map(item => {
         return {
@@ -686,7 +693,8 @@ const loadVarietyOptions = async (detail, preserveSelection = false) => {
       pageSize: 1000,
       mainCategory: getMainCategoryLabel(detail.inputType),
       subCategory: getSubCategoryLabel(detail.inputCategory),
-      status: '0'
+      status: '0',
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
     })
 
     const list = response.data?.list || []
@@ -821,7 +829,7 @@ const fetchStock = async (index) => {
     const inputTypeLabel = getMainCategoryLabel(detail.inputType)
     const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
 
-    const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+    const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, zoneWoredaFlag.value)
     if (res.code === 200 && Array.isArray(res.data)) {
       const matched = findMatchedStockItem(res.data, inputTypeLabel, inputCategoryLabel, detail.variety)
       detail.currentStock = matched?.availableQty ?? 0
@@ -891,7 +899,7 @@ const validateQuantity = async (index) => {
     const inputTypeLabel = getMainCategoryLabel(detail.inputType)
     const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
 
-    const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+    const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, zoneWoredaFlag.value)
     if (stockRes.code === 200 && Array.isArray(stockRes.data)) {
       const matched = findMatchedStockItem(stockRes.data, inputTypeLabel, inputCategoryLabel, detail.variety)
       const available = matched?.availableQty ?? 0
@@ -924,7 +932,7 @@ const getUnionInfo = async (value) => {
     formData.targetId = selectedUnion?.id || ''
     selectedUnionOrgName.value = selectedUnion?.orgName || value
 
-    const response = await getUnionDetailByUnionId(unionId)
+    const response = await getUnionDetailByUnionId(unionId, zoneWoredaFlag.value)
     if (response.code === 200 && response.data) {
       formData.targetAddress = response.data.fullAddress
       formData.targetContact = response.data.operator
@@ -944,7 +952,8 @@ const loadDemandList = async (unionCode) => {
   try {
     const response = await getTownAggregationDetail({
       sourceCode: unionCode,
-      year: formData.releaseYear || new Date().getFullYear().toString()
+      year: formData.releaseYear || new Date().getFullYear().toString(),
+      ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
     })
     if (response.code === 200) {
       demandList.value = response.data || []
@@ -971,7 +980,7 @@ const handleYearChange = () => {
 const fetchDetail = async () => {
   loading.value = true
   try {
-    const response = await getOseReleaseDetail(route.params.id)
+    const response = await getOseReleaseDetail(route.params.id, zoneWoredaFlag.value)
     if (response.code === 200 && response.data) {
       Object.assign(formData, response.data.main)
       formData.details = (response.data.details || []).map(detail => normalizeDetailRow(detail))
@@ -1054,7 +1063,7 @@ const handleSubmit = async () => {
 
         const inputTypeLabel = getMainCategoryLabel(item.inputType)
         const inputCategoryLabel = getSubCategoryLabel(item.inputCategory)
-        const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, item.variety)
+        const stockRes = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, item.variety, zoneWoredaFlag.value)
         if (stockRes.code === 200 && Array.isArray(stockRes.data)) {
           const matched = findMatchedStockItem(stockRes.data, inputTypeLabel, inputCategoryLabel, item.variety)
           const available = matched?.availableQty ?? 0
@@ -1066,7 +1075,10 @@ const handleSubmit = async () => {
         }
       }
 
-      const submitData = { ...formData }
+      const submitData = {
+        ...formData,
+        ...(zoneWoredaFlag.value ? { flag: zoneWoredaFlag.value } : {})
+      }
       submitData.details = formData.details.map(({ varietyOptions, varietyLoading, varietyId, season, ...detail }) => ({ ...detail }))
       if (Array.isArray(formData.targetId) && formData.targetId.length > 0) {
         submitData.targetId = formData.targetId[formData.targetId.length - 1]

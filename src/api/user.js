@@ -4,12 +4,13 @@ import { rsaEncrypt } from '../utils/rsaEncrypt'
 
 
 // 获取当前用户信息（OAuth2）
-export const getCurrentUserInfo = () => {
+export const getCurrentUserInfo = (flag) => {
   return request({
     url: '/oauth2/getCurrentUserInfo',
     method: 'get',
     params: {
-      appId: 'INSPUR-ICD'
+      appId: 'INSPUR-ICD',
+      ...(flag === undefined ? {} : { flag })
     }
   })
 }

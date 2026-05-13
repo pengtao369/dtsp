@@ -1676,7 +1676,54 @@ const routes = [
         component: () => import('../views/research/input-circulation/boa-zone/detail.vue'),
         meta: { title: 'research.menu.boaToZoneDetail', hideInMenu: true, requiresAuth: true }
       },
-
+      ////////
+      // zone to woreda 新增页面
+      {
+        path:'input-circulation/zone-woreda',
+        name: 'ZoneWoredaReleaseDetail',
+        component: () => import('../views/research/input-circulation/zone-woreda/index.vue'),
+        meta: {title: 'research.menu.zoneToworeda', hideInMenu: true, requiresAuth: true}
+      },
+      {
+        path: 'input-circulation/zone-woreda/add',
+        name: 'ZoneWoredaReleaseAdd',
+        component: () => import('../views/research/input-circulation/ose-release/form.vue'),
+        meta: { title: 'research.menu.zoneToworedaAdd', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/zone-woreda/edit/:id',
+        name: 'ZoneWoredaReleaseEdit',
+        component: () => import('../views/research/input-circulation/ose-release/form.vue'),
+        meta: { title: 'research.menu.zoneToworedaEdit', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/zone-woreda/detail/:id',
+        name: 'ZoneWoredaReleaseView',
+        component: () => import('../views/research/input-circulation/ose-release/detail.vue'),
+        meta: { title: 'research.menu.zoneToworedaDetail', hideInMenu: true, requiresAuth: true }
+      },
+      // woreda 接收
+      {
+        path: 'input-circulation/woreda-new-receive',
+        name: 'WoredaReceive',
+        component: () => import('../views/research/input-circulation/woreda-new-receive/index.vue'),
+        meta: {title: 'research.menu.woredaReceive', hideInMenu: true, requiresAuth: true}
+      },
+      //woreda to kebele 新增页面
+      {
+         path:'input-circulation/woreda-kebele',
+         name: 'WoredaKebeleReleaseDetail',
+         component: () => import('../views/research/input-circulation/woreda-kebele/index.vue'),
+         meta: {title: 'research.menu.woredaTokebele', hideInMenu: true, requiresAuth: true}
+      },
+      // kebele 接收
+      {
+        path: 'input-circulation/kebele-receive',
+        name: 'KebeleReceive',
+        component: () => import('../views/research/input-circulation/kebele-receive/index.vue'),
+        meta: {title: 'research.menu.kebeleReceive', hideInMenu: true, requiresAuth: true}
+      },
+      /////////
       // OSE分发种子到Union
       {
         path: 'input-circulation/ose-release',

@@ -81,10 +81,11 @@ export function getData(dictCode) {
 }
 
 // 根据字典类型查询字典数据信息
-export function getDicts(dictType) {
+export function getDicts(dictType, flag) {
   return request({
     url: '/system/dict/data/type/' + dictType,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 

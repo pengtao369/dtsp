@@ -72,10 +72,11 @@ export const editOseRelease = (data) => {
  * 获取OSE分发单详情
  * Get OSE release detail
  */
-export const getOseReleaseDetail = (id) => {
+export const getOseReleaseDetail = (id, flag) => {
   return agricultureRequest({
     url: `/invested/release/ose/detail/${id}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -83,10 +84,11 @@ export const getOseReleaseDetail = (id) => {
  * 根据releaseId获取OSE分发单详情
  * Get OSE release detail by releaseId
  */
-export const getOseReleaseDetailByReleaseId = (releaseId) => {
+export const getOseReleaseDetailByReleaseId = (releaseId, flag) => {
   return agricultureRequest({
     url: `/invested/release/ose/detailByReleaseId/${releaseId}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -94,10 +96,11 @@ export const getOseReleaseDetailByReleaseId = (releaseId) => {
  * 删除OSE分发单
  * Delete OSE release
  */
-export const deleteOseRelease = (ids) => {
+export const deleteOseRelease = (ids, flag) => {
   return agricultureRequest({
     url: `/invested/release/ose/delete/${ids}`,
-    method: 'delete'
+    method: 'delete',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -106,11 +109,14 @@ export const deleteOseRelease = (ids) => {
  * Get release stock status
  * @param {string} releaseIds - 逗号分隔的分发单ID列表
  */
-export const getReleaseStockStatus = (releaseIds) => {
+export const getReleaseStockStatus = (releaseIds, flag) => {
   return agricultureRequest({
     url: '/invested/release/ose/stockStatus',
     method: 'get',
-    params: { releaseIds }
+    params: {
+      releaseIds,
+      ...(flag === undefined ? {} : { flag })
+    }
   })
 }
 
@@ -145,25 +151,30 @@ export const getBoaZoneReleaseDetail = (id) => {
   })
 }
 
-export const getBoaZoneReleaseDetailByReleaseId = (releaseId) => {
+export const getBoaZoneReleaseDetailByReleaseId = (releaseId, flag) => {
   return agricultureRequest({
     url: `/invested/release/boa-zone/detailByReleaseId/${releaseId}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
-export const deleteBoaZoneRelease = (ids) => {
+export const deleteBoaZoneRelease = (ids, flag) => {
   return agricultureRequest({
     url: `/invested/release/boa-zone/delete/${ids}`,
-    method: 'delete'
+    method: 'delete',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
-export const getBoaZoneReleaseStockStatus = (releaseIds) => {
+export const getBoaZoneReleaseStockStatus = (releaseIds, flag) => {
   return agricultureRequest({
     url: '/invested/release/boa-zone/stockStatus',
     method: 'get',
-    params: { releaseIds }
+    params: {
+      releaseIds,
+      ...(flag === undefined ? {} : { flag })
+    }
   })
 }
 
@@ -182,7 +193,7 @@ export const getAvailableStock = (inputType, inputCategory, organCode) => {
   })
 }
 
-export const getDeptCategoryStock = (deptId, mainCategory, subCategory, productName) => {
+export const getDeptCategoryStock = (deptId, mainCategory, subCategory, productName, flag) => {
   const params = { dept_id: deptId }
   if (mainCategory) params.main_category = mainCategory
   if (subCategory) params.sub_category = subCategory
@@ -190,6 +201,7 @@ export const getDeptCategoryStock = (deptId, mainCategory, subCategory, productN
     params.productName = productName
     params.product_name = productName
   }
+  if (flag !== undefined) params.flag = flag
   return agricultureRequest({
     url: '/inventory/warehouse-manage/list-by-dept',
     method: 'get',
@@ -287,10 +299,11 @@ export const getUnionReleaseDetail = (id) => {
  * 根据releaseId获取Union分发单详情
  * Get Union release detail by releaseId
  */
-export const getUnionReleaseDetailByReleaseId = (releaseId) => {
+export const getUnionReleaseDetailByReleaseId = (releaseId, flag) => {
   return agricultureRequest({
     url: `/invested/release/union/detailByReleaseId/${releaseId}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -298,10 +311,11 @@ export const getUnionReleaseDetailByReleaseId = (releaseId) => {
  * 删除Union分发单
  * Delete Union release
  */
-export const deleteUnionRelease = (ids) => {
+export const deleteUnionRelease = (ids, flag) => {
   return agricultureRequest({
     url: `/invested/release/union/delete/${ids}`,
-    method: 'get'
+    method: 'get',
+    params: flag === undefined ? undefined : { flag }
   })
 }
 
@@ -323,13 +337,14 @@ export const getWoredaReceiveList = (params) => {
  * Woreda确认接收
  * Confirm Woreda receive
  */
-export const confirmWoredaReceive = (id, confirmBy, confirmOrg) => {
+export const confirmWoredaReceive = (id, confirmBy, confirmOrg, flag) => {
   return agricultureRequest({
     url: `/invested/receive/woreda/confirm/${id}`,
     method: 'post',
     params: {
       confirmBy,
-      confirmOrg
+      confirmOrg,
+      ...(flag === undefined ? {} : { flag })
     }
   })
 }

@@ -128,12 +128,13 @@ export const uploadFile = (formData) => {
  * 获取union详情
  * @param {number} id - unionID
  */
-export const getUnionDetailByUnionId = (id) => {
+export const getUnionDetailByUnionId = (id, flag) => {
   return request({
     url: `${API_BASE_URL}/input/org-registration/detail`,
     method: 'get',
     params: {
-      id: id
+      id: id,
+      ...(flag === undefined ? {} : { flag })
     }
   }).then(res => {
     // 转换返回数据：驼峰转下划线
