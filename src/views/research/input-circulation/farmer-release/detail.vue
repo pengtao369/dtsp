@@ -140,7 +140,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
@@ -155,6 +155,8 @@ const userStore = useUserStore()
 const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const useKebeleFlag = computed(() => route.query.source === 'kebele-farmer')
+const requestFlag = computed(() => (useKebeleFlag.value ? 1 : undefined))
 const loading = ref(false)
 const detailData = ref({ main: {}, details: [] })
 const demandList = ref([])
@@ -166,7 +168,7 @@ const unitOptions = ref([])
 const fetchDetail = async () => {
   loading.value = true
   try {
-    const response = await getFarmerReleaseDetail(route.params.id)
+    const response = await getFarmerReleaseDetail(route.params.id, requestFlag.value)
     if (response.code === 200) {
       const data = response.data || {}
       const rawDetails = data.details || data.detailList || []
@@ -239,7 +241,7 @@ const fetchCurrentStock = async () => {
     try {
       const inputTypeLabel = getMainCategoryLabel(detail.inputType)
       const inputCategoryLabel = getSubCategoryLabel(detail.inputCategory)
-      const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety)
+      const res = await getDeptCategoryStock(deptId, inputTypeLabel, inputCategoryLabel, detail.variety, requestFlag.value)
       if (res.code === 200 && Array.isArray(res.data)) {
         const matched = findMatchedStockItem(res.data, inputTypeLabel, inputCategoryLabel, detail.variety)
         return { ...detail, currentStock: matched?.availableQty ?? 0 }
@@ -257,7 +259,10 @@ const loadDemandList = async (farmerId) => {
   demandLoading.value = true
   try {
     const year = detailData.value.main?.releaseYear || detailData.value.main?.release_year || new Date().getFullYear().toString()
-    const response = await getFarmerDemandByFarmerId(farmerId, { year })
+    const response = await getFarmerDemandByFarmerId(farmerId, {
+      year,
+      ...(useKebeleFlag.value ? { flag: 1 } : {})
+    })
     if (response.code === 200) {
       demandList.value = response.data || []
     }
@@ -271,9 +276,9 @@ const loadDemandList = async (farmerId) => {
 const loadCategoryOptions = async () => {
   try {
     const [mainRes, subRes, unitRes] = await Promise.all([
-      getDicts('inventory_main_category'),
-      getDicts('inventory_sub_category'),
-      getDicts('inventory_unit_new')
+      getDicts('inventory_main_category', requestFlag.value),
+      getDicts('inventory_sub_category', requestFlag.value),
+      getDicts('inventory_unit_new', requestFlag.value)
     ])
 
     mainCategoryOptions.value = (mainRes.data || []).map(item => ({

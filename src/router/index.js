@@ -1723,6 +1723,13 @@ const routes = [
         component: () => import('../views/research/input-circulation/kebele-receive/index.vue'),
         meta: {title: 'research.menu.kebeleReceive', hideInMenu: true, requiresAuth: true}
       },
+      // kebele to farmer
+      {
+        path: 'input-circulation/kebele-farmer',
+        name: 'KebeleFarmerReleaseDetail',
+        component: () => import('../views/research/input-circulation/kebele-farmer/index.vue'),
+        meta: { title: 'research.menu.kebeleTofarmer'}
+      },
       /////////
       // OSE分发种子到Union
       {
