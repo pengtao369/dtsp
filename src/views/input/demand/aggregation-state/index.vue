@@ -1015,9 +1015,9 @@ const exportFilters = reactive({
 
 const getSeasonLabel = (value) => {
   const seasonMap = {
-    '0': 'Summer',
-    '1': 'Spring',
-    '2': 'Irrigation'
+    '1': 'Summer',
+    '2': 'Spring',
+    '3': 'Irrigation'
   }
   const rawValue = value ?? ''
   return seasonMap[String(rawValue)] || getLabelByValue('agri_season', rawValue) || rawValue || '-'

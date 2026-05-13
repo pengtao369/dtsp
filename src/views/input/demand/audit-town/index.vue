@@ -514,9 +514,9 @@ const getDictLabel = (dictType, value) => {
 
 const getSeasonLabel = (value) => {
   const seasonMap = {
-    '0': 'Summer',
-    '1': 'Spring',
-    '2': 'Irrigation'
+    '1': 'Summer',
+    '2': 'Spring',
+    '3': 'Irrigation'
   }
   return seasonMap[String(value)] || value || '-'
 }
