@@ -187,7 +187,10 @@ const handleQuery = async () => {
     queryParams.endTime = ''
   }
   try {
-    const response = await getFarmerReceiveList(queryParams)
+    const response = await getFarmerReceiveList({
+      ...queryParams,
+      flag: 2
+    })
     if (response.code === 200) {
       receiveList.value = response.rows || []
       total.value = response.total || 0
