@@ -12,7 +12,9 @@ export default {
   outWarehouse: '出库仓库',
   inWarehouse: '入库仓库',
   farmerId: '农民ID',
+  farmerPhone: '农民联系电话',
   farmerName: '农民姓名',
+  kebeleName: 'Kebele名称',
   receiveStatus: '领用状态',
   quotaDetail: '配额详情',
   farmerAddress: '农民联系地址',
@@ -21,6 +23,7 @@ export default {
   notReceived: '未领用',
   partialReceived: '部分领用',
   received: '已领用',
+  completed: '已完成',
 
   // 分发相关
   releaseId: '分发单编号',
@@ -68,6 +71,7 @@ export default {
   inputName: '投入品名称',
   required: '需求数量',
   quantity: '分发数量',
+  currentStock: '当前库存(KG)',
   demandQuantity: '需求数量',
   quantityExceedsDemand: '分发数量不能超过需求数量',
   quantityCannotBeZero: '分发数量不能为0',
@@ -86,6 +90,7 @@ export default {
   editRelease: '编辑分发单',
   viewRelease: '查看分发单',
   deleteRelease: '删除分发单',
+  totalPrice: '总价',
 
   // Union接收确认
   confirmBy: '接收人',
@@ -102,15 +107,14 @@ export default {
   pleaseSelectWoreda: '请选择Woreda',
 
   // 农民相关
-  farmerPhone: '农民联系电话',
   targetFarmer: '目标农民',
   pleaseEnterFarmerId: '请输入农民ID',
   pleaseEnterFarmerName: '请输入农民姓名',
+  pleaseEnterKebeleName: '请输入Kebele名称',
 
   // 农民分发明细
   warehouseId: '仓库ID',
   batchId: '批次ID',
-  totalPrice: '总价',
 
   // 接收状态
   pending: '待确认',
@@ -137,6 +141,26 @@ export default {
   queryKebeleListFailed: '获取Kebele列表信息失败',
   getWoredaInfoFailed: '获取Woreda信息失败',
   getKebeleInfoFailed: '获取Kebele信息失败',
+  organCodeMissing: '无法获取机构编码',
+
+  // 消息弹窗
+  messageTitle: '消息',
+  messageGreeting: '亲爱的农民，',
+  messageAllocationNotice: '您已分配到',
+  messagePickupPrompt: '请前往以下地点领取您的种子：',
+  messageLocation: '地点',
+  messageQuantity: '数量',
+  messageDate: '日期',
+  messageSeedTypePlaceholder: '[种子类型]',
+  messagePickupLocationPlaceholder: '[领取地点名称]',
+  messageAddressPlaceholder: '[地址]',
+  messageQuantityPlaceholder: '[XX Kg]',
+  messageDatePlaceholder: '[日期]',
+
+  // 季节
+  seasonSummer: '夏季',
+  seasonSpring: '春季',
+  seasonIrrigation: '灌溉季',
 
   // 菜单项
   inputCirculation: '投入品流通管理',

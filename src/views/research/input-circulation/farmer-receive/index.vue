@@ -4,8 +4,8 @@
       <!-- 页面头部 -->
       <PageHeader
         icon="ri-file-receive-line"
-        :title="$t('inputCirculation.cooperativeReleaseToFarmer')"
-        :subtitle="$t('inputCirculation.cooperativeReleaseToFarmer')" />
+        :title="$t('inputCirculation.farmerReceive')"
+        :subtitle="$t('inputCirculation.farmerReceive')" />
 
       <!-- 内容区域 -->
       <div class="content-wrapper">
@@ -53,7 +53,7 @@
         </div>
 
         <!-- 列表卡片 -->
-        <InfoCard :title="$t('inputCirculation.cooperativeReleaseToFarmer')" icon="ri-file-list-3-line">
+        <InfoCard :title="$t('inputCirculation.farmerReceive')" icon="ri-file-list-3-line">
           <!-- PC端表格 -->
           <div class="table-wrapper pc-only">
             <el-table :data="receiveList" stripe v-loading="loading">

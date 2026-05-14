@@ -1834,19 +1834,19 @@ const routes = [
         path: 'input-circulation/farmer-release/add',
         name: 'FarmerReleaseAdd',
         component: () => import('../views/research/input-circulation/farmer-release/form.vue'),
-        meta: { title: 'research.menu.oseReleaseToUnionAdd', hideInMenu: true, requiresAuth: true }
+        meta: { title: 'research.menu.farmerReleaseAdd', hideInMenu: true, requiresAuth: true }
       },
       {
         path: 'input-circulation/farmer-release/edit/:id',
         name: 'FarmerReleaseEdit',
         component: () => import('../views/research/input-circulation/farmer-release/form.vue'),
-        meta: { title: 'research.menu.oseReleaseToUnionEdit', hideInMenu: true, requiresAuth: true }
+        meta: { title: 'research.menu.farmerReleaseEdit', hideInMenu: true, requiresAuth: true }
       },
       {
         path: 'input-circulation/farmer-release/detail/:id',
         name: 'FarmerReleaseDetail',
         component: () => import('../views/research/input-circulation/farmer-release/detail.vue'),
-        meta: { title: 'research.menu.oseReleaseToUnionDetail', hideInMenu: true, requiresAuth: true }
+        meta: { title: 'research.menu.farmerReleaseDetail', hideInMenu: true, requiresAuth: true }
       },
 
       // 农民领用确认

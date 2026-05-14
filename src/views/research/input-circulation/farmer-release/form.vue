@@ -720,7 +720,7 @@ const handleSubmit = async () => {
     try {
       const deptId = userStore.userInfo?.deptId || userStore.userInfo?.user?.deptId
       if (!deptId) {
-        ElMessage.error(t('inputCirculation.organCodeMissing') || '无法获取机构编码')
+        ElMessage.error(t('inputCirculation.organCodeMissing'))
         loading.value = false
         return
       }
@@ -784,20 +784,21 @@ const handleSubmit = async () => {
 }
 
 const SEASON_LABEL_MAP = {
-  '1': 'Summer',
-  '2': 'Spring',
-  '3': 'Irrigation'
+  '1': 'inputCirculation.seasonSummer',
+  '2': 'inputCirculation.seasonSpring',
+  '3': 'inputCirculation.seasonIrrigation'
 }
 
 const seasonOptions = [
-  { label: 'Summer', value: '1' },
-  { label: 'Spring', value: '2' },
-  { label: 'Irrigation', value: '3' }
+  { label: t('inputCirculation.seasonSummer'), value: '1' },
+  { label: t('inputCirculation.seasonSpring'), value: '2' },
+  { label: t('inputCirculation.seasonIrrigation'), value: '3' }
 ]
 
 const formatSeason = (season) => {
   const normalizedSeason = String(season || '').trim()
-  return SEASON_LABEL_MAP[normalizedSeason] || '-'
+  const seasonKey = SEASON_LABEL_MAP[normalizedSeason]
+  return seasonKey ? t(seasonKey) : '-'
 }
 
 // 获取需求数量

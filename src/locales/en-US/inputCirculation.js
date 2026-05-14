@@ -14,14 +14,17 @@ export default {
   farmerId: 'Farmer ID',
   farmerPhone: 'Farmer Phone',
   farmerName: 'Farmer Name',
+  kebeleName: 'Kebele',
   receiveStatus: 'Receive Status',
   quotaDetail: 'Quota Detail',
   farmerAddress: 'Farmer Address',
+  woredaName: 'Woreda',
 
   // Receive status
   notReceived: 'Not Received',
   partialReceived: 'Partially Received',
   received: 'Received',
+  completed: 'Completed',
 
   // Release related
   releaseId: 'Release ID',
@@ -97,6 +100,9 @@ export default {
   confirmReceive: 'Confirm Receive',
   receiveDetail: 'Receive Detail',
   unionName: 'Union Name',
+  targetFarmer: 'Target Farmer',
+  warehouseId: 'Warehouse ID',
+  batchId: 'Batch ID',
 
   // Receive status
   pending: 'Pending',
@@ -123,6 +129,34 @@ export default {
   queryKebeleListFailed: 'Failed to query kebele list',
   getWoredaInfoFailed: 'Failed to get woreda info',
   getKebeleInfoFailed: 'Failed to get kebele info',
+  organCodeMissing: 'Unable to get organization code',
+
+  // Search placeholders
+  pleaseEnterWoredaName: 'Please enter woreda name',
+  pleaseSelectWoreda: 'Please select woreda',
+  pleaseEnterFarmerId: 'Please enter farmer ID',
+  pleaseEnterFarmerName: 'Please enter farmer name',
+  pleaseEnterKebeleName: 'Please enter kebele name',
+  pleaseSelectInputType: 'Please select input type',
+
+  // Message dialog
+  messageTitle: 'Message',
+  messageGreeting: 'Dear Farmer,',
+  messageAllocationNotice: 'You are allocated',
+  messagePickupPrompt: 'Please collect your seed from:',
+  messageLocation: 'Location',
+  messageQuantity: 'Quantity',
+  messageDate: 'Date',
+  messageSeedTypePlaceholder: '[Seed Type]',
+  messagePickupLocationPlaceholder: '[Pickup Location Name]',
+  messageAddressPlaceholder: '[Address]',
+  messageQuantityPlaceholder: '[XX Kg]',
+  messageDatePlaceholder: '[Date]',
+
+  // Seasons
+  seasonSummer: 'Summer',
+  seasonSpring: 'Spring',
+  seasonIrrigation: 'Irrigation',
 
   // Menu items
   inputCirculation: 'Input Circulation Management',

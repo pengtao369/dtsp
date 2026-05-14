@@ -12,10 +12,10 @@
         <!-- 搜索卡片（无标题） -->
         <div class="search-card">
           <SearchForm @search="handleQuery" @reset="handleReset">
-            <SearchItem :label="$t('inputCirculation.woredaName')">
+            <SearchItem :label="$t('inputCirculation.kebeleName')">
               <el-input
                 v-model="queryParams.woredaName"
-                :placeholder="$t('inputCirculation.pleaseEnterWoredaName')"
+                :placeholder="$t('inputCirculation.pleaseEnterKebeleName')"
                 clearable
                 class="search-input">
                 <template #prefix><i class="ri-search-line"></i></template>
@@ -54,10 +54,10 @@
                 :placeholder="$t('common.pleaseSelect')"
                 clearable
                 class="filter-select">
-                <el-option label="completed" value="completed" />
-                <el-option label="pending" value="pending" />
-                <el-option label="noReceived" value="noReceived" />
-                <el-option label="received" value="received" />
+                <el-option :label="$t('inputCirculation.completed')" value="completed" />
+                <el-option :label="$t('inputCirculation.pending')" value="pending" />
+                <el-option :label="$t('inputCirculation.notReceived')" value="noReceived" />
+                <el-option :label="$t('inputCirculation.received')" value="received" />
               </el-select>
             </SearchItem>
 
@@ -94,7 +94,7 @@
               <el-table-column prop="receiveStatus" :label="$t('inputCirculation.receiveStatus')" width="100">
                 <template #default="{ row }">
                   <el-tag :type="row.receiveStatus === 'received' ? 'success' : 'warning'">
-                    {{ row.receiveStatus }}
+                    {{ getReceiveStatusText(row.receiveStatus) }}
                   </el-tag>
                 </template>
               </el-table-column>
@@ -141,7 +141,7 @@
                 <span>{{ item.farmerName }}</span>
               </div>
               <el-tag :type="item.receiveStatus === 'received' ? 'success' : 'warning'" size="small">
-                {{ item.receiveStatus }}
+                {{ getReceiveStatusText(item.receiveStatus) }}
               </el-tag>
             </div>
             <div class="mobile-card-body">
@@ -192,17 +192,17 @@
 
     <el-dialog
       v-model="messageDialogVisible"
-      title="Message"
+      :title="$t('inputCirculation.messageTitle')"
       width="520px"
       destroy-on-close>
       <div class="message-preview">
-        <p class="line">Dear Farmer,</p>
-        <p class="line">You are allocated <span class="placeholder">{{ messageContent.seedType }}</span>.</p>
-        <p class="line">Please collect your seed from:</p>
+        <p class="line">{{ $t('inputCirculation.messageGreeting') }}</p>
+        <p class="line">{{ $t('inputCirculation.messageAllocationNotice') }} <span class="placeholder">{{ messageContent.seedType }}</span>.</p>
+        <p class="line">{{ $t('inputCirculation.messagePickupPrompt') }}</p>
         <p class="line pickup-name"><span class="placeholder">{{ messageContent.pickupLocationName }}</span></p>
-        <p class="line">Location: <span class="placeholder">{{ messageContent.address }}</span></p>
-        <p class="line">Quantity: <span class="placeholder">{{ messageContent.quantity }}</span></p>
-        <p class="line">Date: <span class="placeholder">{{ messageContent.date }}</span></p>
+        <p class="line">{{ $t('inputCirculation.messageLocation') }}: <span class="placeholder">{{ messageContent.address }}</span></p>
+        <p class="line">{{ $t('inputCirculation.messageQuantity') }}: <span class="placeholder">{{ messageContent.quantity }}</span></p>
+        <p class="line">{{ $t('inputCirculation.messageDate') }}: <span class="placeholder">{{ messageContent.date }}</span></p>
       </div>
       <template #footer>
         <el-button @click="messageDialogVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -231,11 +231,19 @@ const selectedIds = ref([])
 const dateRange = ref([])
 const messageDialogVisible = ref(false)
 const messageContent = reactive({
-  seedType: '[Seed Type]',
-  pickupLocationName: '[Pickup Location Name]',
-  address: '[Address]',
-  quantity: '[XX Kg]',
-  date: '[Date]'
+  seedType: '',
+  pickupLocationName: '',
+  address: '',
+  quantity: '',
+  date: ''
+})
+
+const getMessagePlaceholders = () => ({
+  seedType: t('inputCirculation.messageSeedTypePlaceholder'),
+  pickupLocationName: t('inputCirculation.messagePickupLocationPlaceholder'),
+  address: t('inputCirculation.messageAddressPlaceholder'),
+  quantity: t('inputCirculation.messageQuantityPlaceholder'),
+  date: t('inputCirculation.messageDatePlaceholder')
 })
 
 const queryParams = reactive({
@@ -330,19 +338,32 @@ const handleMessage = async (id) => {
     const pickupLocationName = firstDetail.outWarehouseName || firstDetail.outWarehouseCode || main.releaseOrg || ''
     const address = main.releaseOrgAddress || main.address || main.releaseOrg || ''
     const date = main.releaseDate || firstDetail.releaseTime || ''
-    messageContent.seedType = seedType || '[Seed Type]'
-    messageContent.pickupLocationName = pickupLocationName || '[Pickup Location Name]'
-    messageContent.address = address || '[Address]'
-    messageContent.quantity = totalQuantity > 0 ? `${totalQuantity} Kg` : '[XX Kg]'
-    messageContent.date = date || '[Date]'
+    const placeholders = getMessagePlaceholders()
+    messageContent.seedType = seedType || placeholders.seedType
+    messageContent.pickupLocationName = pickupLocationName || placeholders.pickupLocationName
+    messageContent.address = address || placeholders.address
+    messageContent.quantity = totalQuantity > 0 ? `${totalQuantity} Kg` : placeholders.quantity
+    messageContent.date = date || placeholders.date
   } catch (error) {
-    messageContent.seedType = '[Seed Type]'
-    messageContent.pickupLocationName = '[Pickup Location Name]'
-    messageContent.address = '[Address]'
-    messageContent.quantity = '[XX Kg]'
-    messageContent.date = '[Date]'
+    const placeholders = getMessagePlaceholders()
+    messageContent.seedType = placeholders.seedType
+    messageContent.pickupLocationName = placeholders.pickupLocationName
+    messageContent.address = placeholders.address
+    messageContent.quantity = placeholders.quantity
+    messageContent.date = placeholders.date
     ElMessage.error(t('common.queryFailed'))
   }
+}
+
+const getReceiveStatusText = (status) => {
+  const statusKeyMap = {
+    completed: 'completed',
+    pending: 'pending',
+    noReceived: 'notReceived',
+    received: 'received',
+    Confirmed: 'confirmed'
+  }
+  return t(`inputCirculation.${statusKeyMap[status] || status}`)
 }
 
 // 新增
@@ -371,13 +392,13 @@ const handleDetail = (id) => {
 
 // 删除
 const handleDelete = (id) => {
-  ElMessageBox.confirm(t('common.deleteConfirm'), t('warning'), {
-    confirmButtonText: t('confirm'),
-    cancelButtonText: t('cancel'),
+  ElMessageBox.confirm(t('common.deleteConfirm'), t('common.warning'), {
+    confirmButtonText: t('common.confirm'),
+    cancelButtonText: t('common.cancel'),
     type: 'warning'
   }).then(() => {
     deleteFarmerRelease(id, 1).then(() => {
-      ElMessage.success(t('deleteSuccess'))
+      ElMessage.success(t('common.deleteSuccess'))
       handleQuery()
     })
   })
@@ -386,16 +407,16 @@ const handleDelete = (id) => {
 // 批量删除
 const handleBatchDelete = () => {
   if (selectedIds.value.length === 0) {
-    ElMessage.warning(t('pleaseSelectData'))
+    ElMessage.warning(t('common.pleaseSelect'))
     return
   }
-  ElMessageBox.confirm(t('batchDeleteConfirm'), t('warning'), {
-    confirmButtonText: t('confirm'),
-    cancelButtonText: t('cancel'),
+  ElMessageBox.confirm(t('common.confirmDelete'), t('common.warning'), {
+    confirmButtonText: t('common.confirm'),
+    cancelButtonText: t('common.cancel'),
     type: 'warning'
   }).then(() => {
     deleteFarmerRelease(selectedIds.value.join(','), 1).then(() => {
-      ElMessage.success(t('deleteSuccess'))
+      ElMessage.success(t('common.deleteSuccess'))
       handleQuery()
     })
   })
