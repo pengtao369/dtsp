@@ -131,7 +131,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
-import { getUnionReceiveDetail, getOseReleaseDetailByReleaseId } from '@/api/inputCirculation'
+import { getUnionReceiveDetail } from '@/api/inputCirculation'
 import { getTownAggregationDetail } from '@/api/villageAggregation'
 import { getDicts } from '@/api/system/dict'
 import { useDict } from '@/hooks/useDict'
@@ -193,9 +193,14 @@ const fetchDetail = async () => {
       mainData.value = response.data?.main || {}
       detailData.value = response.data?.details || []
       console.log('Union Receive mainData:', mainData.value)
-      // 加载需求列表 - 通过分发单获取 zoneId
-      if (mainData.value.releaseId) {
-        await loadDemandListByReleaseId(mainData.value.releaseId)
+      // 加载需求列表 - 优先使用当前详情接口返回的区域信息
+      const regionCode =
+        mainData.value.zoneId ||
+        mainData.value.zone_id ||
+        mainData.value.sourceCode ||
+        mainData.value.source_code
+      if (regionCode) {
+        await loadDemandList(regionCode)
       }
     }
   } catch (error) {
@@ -205,21 +210,14 @@ const fetchDetail = async () => {
   }
 }
 
-// 通过分发单ID加载需求列表
-const loadDemandListByReleaseId = async (releaseId) => {
+// 加载需求列表
+const loadDemandList = async (regionCode) => {
   demandLoading.value = true
   try {
-    // 先获取分发单详情来获取 zoneId
-    const releaseResponse = await getOseReleaseDetailByReleaseId(releaseId, 1)
-    const releaseMain = releaseResponse.data?.main || {}
-    const regionCode = releaseMain.zoneId || releaseMain.zone_id
-    const year = releaseMain.releaseYear || releaseMain.release_year || new Date().getFullYear().toString()
-
-    if (releaseResponse.code === 200 && regionCode) {
-      const response = await getTownAggregationDetail({ sourceCode: regionCode, year })
-      if (response.code === 200) {
-        demandList.value = response.data || []
-      }
+    const year = mainData.value.releaseYear || mainData.value.release_year || new Date().getFullYear().toString()
+    const response = await getTownAggregationDetail({ sourceCode: regionCode, year })
+    if (response.code === 200) {
+      demandList.value = response.data || []
     }
   } catch (error) {
     console.error('Failed to load demand list:', error)

@@ -173,6 +173,7 @@ const queryParams = reactive({
   inputType: '',
   startTime: '',
   endTime: '',
+  flag: 1,
   pageNum: 1,
   pageSize: 10
 })
