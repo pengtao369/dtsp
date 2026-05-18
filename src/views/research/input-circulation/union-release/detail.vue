@@ -31,10 +31,10 @@
               <el-descriptions-item :label="$t('inputCirculation.releaseName')">
                 {{ detailData.main?.releaseName || '-' }}
               </el-descriptions-item>
-              <el-descriptions-item :label="$t('inputCirculation.targetKebele')">
+              <el-descriptions-item :label="$t('inputCirculation.targetCooperative')">
                 {{ detailData.main?.targetId || '-' }}
               </el-descriptions-item>
-              <el-descriptions-item :label="$t('inputCirculation.kebeleContact')">
+              <el-descriptions-item :label="$t('inputCirculation.cooperativeContact')">
                 {{ detailData.main?.targetContact || '-' }}
               </el-descriptions-item>
               <el-descriptions-item :label="$t('inputCirculation.releaseDate')">

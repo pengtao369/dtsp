@@ -4,8 +4,8 @@
       <!-- 页面头部 -->
       <PageHeader
         icon="ri-file-transfer-line"
-        :title="$t('inputCirculation.unionReleaseToCooperative')"
-        :subtitle="$t('inputCirculation.unionReleaseToCooperative')" />
+        :title="$t('research.menu.woredaTokebele')"
+        :subtitle="$t('research.menu.woredaTokebele')" />
 
       <!-- 内容区域 -->
       <div class="content-wrapper">
@@ -36,7 +36,7 @@
         </div>
 
         <!-- 列表卡片 -->
-        <InfoCard :title="$t('inputCirculation.unionReleaseToCooperative')" icon="ri-file-list-3-line">
+        <InfoCard :title="$t('research.menu.woredaTokebele')" icon="ri-file-list-3-line">
           <template #actions>
             <el-button type="primary" @click="handleAdd">
               <i class="ri-add-line"></i>
@@ -50,7 +50,7 @@
               <el-table-column type="selection" width="50" />
               <el-table-column prop="releaseId" :label="$t('inputCirculation.releaseId')" min-width="150" show-overflow-tooltip />
               <el-table-column prop="releaseName" :label="$t('inputCirculation.releaseName')" min-width="180" show-overflow-tooltip />
-              <el-table-column prop="targetId" :label="$t('inputCirculation.targetWoreda')" min-width="150" show-overflow-tooltip />
+              <el-table-column prop="targetId" :label="$t('inputCirculation.targetKebele')" min-width="150" show-overflow-tooltip />
               <el-table-column prop="releaseDate" :label="$t('inputCirculation.releaseDate')" width="180">
                 <template #default="{ row }">
                   {{ formatDateTime(row.releaseDate) }}
@@ -106,7 +106,7 @@
                 <span class="value">{{ item.releaseId }}</span>
               </div>
               <div class="mobile-card-row">
-                <span class="label">{{ $t('inputCirculation.targetWoreda') }}:</span>
+                <span class="label">{{ $t('inputCirculation.targetKebele') }}:</span>
                 <span class="value">{{ item.targetId }}</span>
               </div>
               <div class="mobile-card-row">
@@ -207,7 +207,7 @@ const loadStockStatus = async () => {
   if (releaseList.value.length === 0) return
   const releaseIds = releaseList.value.map(item => item.releaseId).join(',')
   try {
-    const response = await getReleaseStockStatus(releaseIds, 1)
+    const response = await getReleaseStockStatus(releaseIds)
     if (response.code === 200 && response.data) {
       releaseList.value.forEach(item => {
         item.stockStatus = response.data[item.releaseId] || 'notProcessed'
@@ -245,17 +245,17 @@ const handleReset = () => {
 
 // 新增
 const handleAdd = () => {
-  router.push('/input/input-circulation/union-release/add')
+  router.push('/input/input-circulation/woreda-kebele/add')
 }
 
 // 编辑
 const handleEdit = (id) => {
-  router.push(`/input/input-circulation/union-release/edit/${id}`)
+  router.push(`/input/input-circulation/woreda-kebele/edit/${id}`)
 }
 
 // 详情
 const handleDetail = (id) => {
-  router.push(`/input/input-circulation/union-release/detail/${id}`)
+  router.push(`/input/input-circulation/woreda-kebele/detail/${id}`)
 }
 
 // 删除
@@ -265,7 +265,7 @@ const handleDelete = (id) => {
     cancelButtonText: t('cancel'),
     type: 'warning'
   }).then(() => {
-    deleteUnionRelease(id, 1).then(() => {
+    deleteUnionRelease(id).then(() => {
       ElMessage.success(t('deleteSuccess'))
       handleQuery()
     })
@@ -283,7 +283,7 @@ const handleBatchDelete = () => {
     cancelButtonText: t('cancel'),
     type: 'warning'
   }).then(() => {
-    deleteUnionRelease(selectedIds.value.join(','), 1).then(() => {
+    deleteUnionRelease(selectedIds.value.join(',')).then(() => {
       ElMessage.success(t('deleteSuccess'))
       handleQuery()
     })

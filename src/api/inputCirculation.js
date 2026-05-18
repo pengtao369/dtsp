@@ -378,11 +378,12 @@ export const getFarmerReleaseList = (params) => {
  * 新增农民分发单
  * Add farmer release
  */
-export const addFarmerRelease = (data) => {
+export const addFarmerRelease = (data, flag) => {
   return agricultureRequest({
     url: '/invested/release/farmer/add',
     method: 'post',
     data,
+    params: flag === undefined ? undefined : { flag }
   })
 }
 

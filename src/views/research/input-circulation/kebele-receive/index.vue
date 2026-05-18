@@ -4,8 +4,8 @@
       <!-- 页面头部 -->
       <PageHeader
         icon="ri-list-check-2"
-        :title="$t('research.menu.woredaReceiveConfirm')"
-        :subtitle="$t('research.menu.woredaReceiveConfirm')" />
+        :title="$t('Kebele Receive Confirmation')"
+        :subtitle="$t('Kebele Receive Confirmation')" />
 
       <!-- 内容区域 -->
       <div class="content-wrapper">
@@ -37,7 +37,7 @@
 
         <!-- 列表卡片（注意：no-padding="true"） -->
         <InfoCard
-          :title="$t('research.menu.woredaReceiveConfirm')"
+          :title="$t('Kebele Receive Confirmation')"
           icon="ri-file-list-3-line"
           :no-padding="true">
           

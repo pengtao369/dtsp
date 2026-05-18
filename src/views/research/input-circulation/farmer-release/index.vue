@@ -269,7 +269,7 @@ const handleQuery = () => {
   }
 
   loading.value = true
-  getFarmerReleaseList({ ...queryParams, flag: 1 })
+  getFarmerReleaseList({ ...queryParams, flag: 0 })
     .then(async response => {
       releaseList.value = response.rows || []
       total.value = response.total || 0

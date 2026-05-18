@@ -114,6 +114,11 @@
           "titleKey": "research.menu.unionReleaseToCooperative"
         },
         {
+          "index": "/input/input-circulation/woreda-kebele",
+          "icon": "ri-send-plane-line",
+          "titleKey": "research.menu.woredaTokebele"
+        },
+        {
           "index": "/input/input-circulation/woreda-receive",
           "icon": "ri-check-double-line",
           "titleKey": "research.menu.cooperativeReceiveConfirm"

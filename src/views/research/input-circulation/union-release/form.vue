@@ -39,19 +39,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.targetKebele')" prop="targetId">
+                  <el-form-item :label="$t('inputCirculation.targetCooperative')" prop="targetId">
                     <el-select v-model="formData.targetId" :placeholder="$t('common.pleaseSelect')" @change="getCoorInfo" style="width: 100%">
                       <el-option v-for="item in coorList" :key="item.code" :label="item.name" :value="item.code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.kebeleAddress')">
+                  <el-form-item :label="$t('inputCirculation.cooperativeAddress')">
                     <el-input v-model="formData.targetAddress" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('inputCirculation.kebeleContact')">
+                  <el-form-item :label="$t('inputCirculation.cooperativeContact')">
                     <el-input v-model="formData.targetContact" :placeholder="$t('common.pleaseInput')" />
                   </el-form-item>
                 </el-col>
@@ -254,7 +254,7 @@ import { getUnionReleaseDetail, addUnionRelease, editUnionRelease, getAvailableS
 import { getInventoryWarehouseList } from '@/api/inventory'
 import { listProductManage } from '@/api/productManage'
 import { getCurrentUserInfo } from '@/api/user'
-import { listSubRegionByCode } from '@/api/application'
+import { getOrgansRegionByCode, listSubRegionByCode } from '@/api/application'
 import { getTownAggregationDetail } from '@/api/villageAggregation'
 import { getDicts } from '@/api/system/dict'
 import { parseI18nValue } from '@/utils/i18nHelper'
@@ -620,13 +620,14 @@ const getCoorInfo = async (value) => {
   }
   loading.value = true
   try {
-    const selectedKebele = coorList.value.find(item => String(item.code) === String(value))
-    formData.targetAddress = selectedKebele?.name || ''
+    formData.targetAddress = ''
     formData.targetContact = ''
     formData.targetPhone = ''
     clearInWarehouseSelection()
   } catch (error) {
-    ElMessage.error(t('inputCirculation.getKebeleInfoFailed'))
+    formData.targetAddress = ''
+    formData.targetContact = ''
+    formData.targetPhone = ''
   } finally {
     loading.value = false
   }
@@ -1000,7 +1001,7 @@ const handleSubmit = async () => {
       }
 
       const apiFunc = isEdit.value ? editUnionRelease : addUnionRelease
-      const submitData = { ...formData, flag: 1 }
+      const submitData = { ...formData, flag: 0  }
       submitData.details = formData.details.map(({ varietyOptions, varietyLoading, ...detail }) => ({ ...detail }))
       const response = await apiFunc(submitData)
       if (response.code === 200) {
@@ -1023,16 +1024,16 @@ const getAllCoopList = async (value) => {
   loading.value = true
   regionCode.value = value
   try {
-    const response = await listSubRegionByCode({ regionCode: value })
+    const response = await getOrgansRegionByCode({ regionCode: value })
     if (response.code === 200) {
       const list = response.data || []
       coorList.value = list.map(item => ({
-        code: item.code,
-        name: item.name
+        code: item.code || item.id,
+        name: item.orgName || item.name
       }))
     }
   } catch (error) {
-    ElMessage.error(t('inputCirculation.queryKebeleListFailed'))
+    ElMessage.error(t('inputCirculation.queryCooperativeListFailed'))
   } finally {
     loading.value = false
   }

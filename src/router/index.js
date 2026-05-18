@@ -1714,7 +1714,25 @@ const routes = [
          path:'input-circulation/woreda-kebele',
          name: 'WoredaKebeleReleaseDetail',
          component: () => import('../views/research/input-circulation/woreda-kebele/index.vue'),
-         meta: {title: 'research.menu.woredaTokebele', hideInMenu: true, requiresAuth: true}
+         meta: {title: 'research.menu.woredaTokebele', requiresAuth: true}
+      },
+      {
+        path: 'input-circulation/woreda-kebele/add',
+        name: 'WoredaKebeleAdd',
+        component: () => import('../views/research/input-circulation/woreda-kebele/form.vue'),
+        meta: { title: 'research.menu.woredaTokebeleAdd', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/woreda-kebele/edit/:id',
+        name: 'WoredaKebeleEdit',
+        component: () => import('../views/research/input-circulation/woreda-kebele/form.vue'),
+        meta: { title: 'research.menu.woredaTokebeleEdit', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/woreda-kebele/detail/:id',
+        name: 'WoredaKebeleDetail',
+        component: () => import('../views/research/input-circulation/woreda-kebele/detail.vue'),
+        meta: { title: 'research.menu.woredaTokebeleDetail', hideInMenu: true, requiresAuth: true }
       },
       // kebele 接收
       {
@@ -1729,6 +1747,24 @@ const routes = [
         name: 'KebeleFarmerReleaseDetail',
         component: () => import('../views/research/input-circulation/kebele-farmer/index.vue'),
         meta: { title: 'research.menu.kebeleTofarmer'}
+      },
+      {
+        path: 'input-circulation/kebele-farmer/add',
+        name: 'KebeleFarmerReleaseAdd',
+        component: () => import('../views/research/input-circulation/kebele-farmer/form.vue'),
+        meta: { title: 'research.menu.farmerReleaseAdd', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/kebele-farmer/edit/:id',
+        name: 'KebeleFarmerReleaseEdit',
+        component: () => import('../views/research/input-circulation/kebele-farmer/form.vue'),
+        meta: { title: 'research.menu.farmerReleaseEdit', hideInMenu: true, requiresAuth: true }
+      },
+      {
+        path: 'input-circulation/kebele-farmer/detail/:id',
+        name: 'KebeleFarmerReleaseView',
+        component: () => import('../views/research/input-circulation/kebele-farmer/detail.vue'),
+        meta: { title: 'research.menu.farmerReleaseDetail', hideInMenu: true, requiresAuth: true }
       },
       /////////
       // OSE分发种子到Union

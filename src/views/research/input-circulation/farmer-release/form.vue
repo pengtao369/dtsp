@@ -767,8 +767,9 @@ const handleSubmit = async () => {
         }))
       }
 
+      const apiFlag = isEdit.value ? requestFlag.value : 0
       const apiFunc = isEdit.value ? editFarmerRelease : addFarmerRelease
-      const response = await apiFunc(submitData, requestFlag.value)
+      const response = await apiFunc(submitData, apiFlag)
       if (response.code === 200) {
         ElMessage.success(t('common.saveSuccess'))
         router.back()

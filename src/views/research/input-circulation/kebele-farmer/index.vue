@@ -4,8 +4,8 @@
       <!-- 页面头部 -->
       <PageHeader
         icon="ri-file-transfer-line"
-        :title="$t('inputCirculation.cooperativeReleaseToFarmer')"
-        :subtitle="$t('inputCirculation.cooperativeReleaseToFarmer')" />
+        :title="$t('research.menu.kebeleTofarmer')"
+        :subtitle="$t('research.menu.kebeleTofarmer')" />
 
       <!-- 内容区域 -->
       <div class="content-wrapper">
@@ -75,7 +75,7 @@
         </div>
 
         <!-- 列表卡片 -->
-        <InfoCard :title="$t('inputCirculation.cooperativeReleaseToFarmer')" icon="ri-file-list-3-line">
+        <InfoCard :title="$t('research.menu.kebeleTofarmer')" icon="ri-file-list-3-line">
           <template #actions>
             <el-button type="primary" @click="handleAdd">
               <i class="ri-add-line"></i>
@@ -369,7 +369,7 @@ const getReceiveStatusText = (status) => {
 // 新增
 const handleAdd = () => {
   router.push({
-    path: '/input/input-circulation/farmer-release/add',
+    path: '/input/input-circulation/kebele-farmer/add',
     query: { source: 'kebele-farmer' }
   })
 }
@@ -377,7 +377,7 @@ const handleAdd = () => {
 // 编辑
 const handleEdit = (id) => {
   router.push({
-    path: `/input/input-circulation/farmer-release/edit/${id}`,
+    path: `/input/input-circulation/kebele-farmer/edit/${id}`,
     query: { source: 'kebele-farmer' }
   })
 }
@@ -385,7 +385,7 @@ const handleEdit = (id) => {
 // 详情
 const handleDetail = (id) => {
   router.push({
-    path: `/input/input-circulation/farmer-release/detail/${id}`,
+    path: `/input/input-circulation/kebele-farmer/detail/${id}`,
     query: { source: 'kebele-farmer' }
   })
 }
