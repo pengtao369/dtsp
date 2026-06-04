@@ -521,16 +521,32 @@ const getSeasonLabel = (value) => {
   return seasonMap[String(value)] || value || '-'
 }
 
+const hasActualAdjustment = (row = {}) => {
+  const flag = row.hasAdjustment
+  const status = String(row.adjustmentStatus || '').trim().toLowerCase()
+  return flag === true || flag === 1 || flag === '1' || flag === 'true' || ['adjusted', 'submit', 'submitted', 'approved'].includes(status)
+}
+
+const getReceivedDemandQuantity = (row = {}) => (
+  row.receivedQuantity ?? row.originalQuantity ?? row.beforeQuantity ?? row.totalQuantity ?? 0
+)
+
+const getAdjustedDemandQuantity = (row = {}) => (
+  hasActualAdjustment(row) && row.adjustedQuantity !== null && row.adjustedQuantity !== undefined
+    ? row.adjustedQuantity
+    : getReceivedDemandQuantity(row)
+)
+
 const normalizeDetailRow = (row = {}) => ({
   ...row,
   summaryId: row.summaryId || currentSummaryRow.value?.id || '',
   year: row.year || currentSummaryRow.value?.year || yearParam.value || '',
   variety: row.variety || row.varieties || '',
   unit: row.unit || row.units || '',
-  receivedQuantity: row.receivedQuantity ?? row.totalQuantity ?? 0,
-  adjustedQuantity: row.adjustedQuantity ?? 0,
+  receivedQuantity: getReceivedDemandQuantity(row),
+  adjustedQuantity: getAdjustedDemandQuantity(row),
   adjustmentStatus: row.adjustmentStatus || 'pending',
-  hasAdjustment: Boolean(row.hasAdjustment)
+  hasAdjustment: hasActualAdjustment(row)
 })
 
 const formatQuantity = (value, unit) => {

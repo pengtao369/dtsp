@@ -987,11 +987,17 @@ const getSeasonLabel = (value) => {
   return seasonMap[String(rawValue)] || getLabelByValue('agri_season', rawValue) || rawValue || '-'
 }
 
+const hasActualAdjustment = (row = {}) => {
+  const flag = row.hasAdjustment
+  const status = String(row.adjustmentStatus || '').trim().toLowerCase()
+  return flag === true || flag === 1 || flag === '1' || flag === 'true' || ['adjusted', 'submit', 'submitted', 'approved'].includes(status)
+}
+
 const getEffectiveQuantity = (row) => {
-  if (row?.hasAdjustment && row.adjustedQuantity !== null && row.adjustedQuantity !== undefined) {
+  if (hasActualAdjustment(row) && row.adjustedQuantity !== null && row.adjustedQuantity !== undefined) {
     return row.adjustedQuantity
   }
-  return row?.receivedQuantity ?? row?.totalQuantity ?? '-'
+  return row?.receivedQuantity ?? row?.originalQuantity ?? row?.totalQuantity ?? '-'
 }
 
 // 加载某一行已审批数量（已通过镇级记录数）
