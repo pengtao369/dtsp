@@ -36,6 +36,8 @@ const routeWhitelist = [
   '/research/c1-propagation-audit/detail',
   '/research/c1-propagation-audit/audit',
   '/research/variety',
+  '/input/registration',
+  '/input/registration/approval',
   '/input/registration/audit',
   '/input/demand/audit',
   '/input/demand/audit-district',
