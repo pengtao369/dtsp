@@ -36,9 +36,6 @@ const routeWhitelist = [
   '/research/c1-propagation-audit/detail',
   '/research/c1-propagation-audit/audit',
   '/research/variety',
-  '/input/registration',
-  '/input/registration/approval',
-  '/input/registration/audit',
   '/input/demand/audit',
   '/input/demand/audit-district',
   '/input/demand/audit-state',
@@ -47,6 +44,73 @@ const routeWhitelist = [
   '/inventory/stock-check-review/review',
   '/research/detection-audit'
 ]
+
+const normalizeMenuPath = (path) => {
+  if (!path || /^https?:\/\//.test(path)) return ''
+  return (path.startsWith('/') ? path : `/${path}`).replace(/\/\//g, '/')
+}
+
+const getMenuPath = (menu) => normalizeMenuPath(menu?.path)
+
+const findMenuByPath = (menus, path) => {
+  const normalizedPath = normalizeMenuPath(path)
+  for (const menu of menus || []) {
+    if (getMenuPath(menu) === normalizedPath) {
+      return menu
+    }
+    const childMatch = findMenuByPath(menu.children, normalizedPath)
+    if (childMatch) {
+      return childMatch
+    }
+  }
+  return null
+}
+
+const getFirstVisibleLeafPath = (menus, options = {}) => {
+  const { skipPaths = new Set(), fallbackPath = '' } = options
+
+  for (const menu of menus || []) {
+    if (!menu || menu.hidden === true) continue
+
+    const menuPath = getMenuPath(menu)
+    if (menu.children?.length) {
+      const childPath = getFirstVisibleLeafPath(menu.children, options)
+      if (childPath) return childPath
+    }
+
+    if (!menuPath || skipPaths.has(menuPath)) {
+      continue
+    }
+
+    return menuPath
+  }
+
+  return fallbackPath
+}
+
+const getDefaultInputRoute = (userStore) => {
+  const inputRoot = findMenuByPath(userStore.menus, '/input')
+  if (!inputRoot?.children?.length) {
+    return '/home'
+  }
+
+  return getFirstVisibleLeafPath(inputRoot.children, {
+    fallbackPath: '/home'
+  })
+}
+
+const getDefaultEntryRoute = (userStore) => {
+  const inputRoute = getDefaultInputRoute(userStore)
+  if (inputRoute !== '/home') {
+    return inputRoute
+  }
+
+  const firstSystemRoute = getFirstVisibleLeafPath(userStore.menus, {
+    fallbackPath: '/home'
+  })
+
+  return firstSystemRoute || '/home'
+}
 
 const routes = [
   // OAuth2回调页面（不需要认证）- SSO模式下使用
@@ -1150,7 +1214,6 @@ const routes = [
     path: '/input',
     name: 'InputSystem',
     component: () => import('../layout/SystemLayout.vue'),
-    redirect: '/input/registration',
     meta: { requiresAuth: true, layoutConfig: inputLayoutConfig },
     children: [
       // 注册管理
@@ -2391,7 +2454,7 @@ router.beforeEach(async (to, from, next) => {
       // 清理URL中的token参数
       if (window.location.hash.includes('token=') || window.location.search.includes('token=')) {
         window.history.replaceState(null, '', window.location.pathname + window.location.hash.split('?')[0])
-        return next('/home')
+        return next(getDefaultEntryRoute(userStore))
       }
     } catch (error) {
       console.error('路由守卫: SSO登录后获取用户信息失败:', error)
@@ -2431,6 +2494,10 @@ router.beforeEach(async (to, from, next) => {
         await userStore.getPermissions()
       }
       console.log('路由守卫: 用户信息已存在，直接放行')
+    }
+
+    if (to.path === '/input') {
+      return next(getDefaultInputRoute(userStore))
     }
 
     // 检查路由权限

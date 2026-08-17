@@ -457,7 +457,7 @@ const getCustomButtons = (row) => {
     { type: 'primary', action: 'view', label: 'view', icon: 'ri-eye-line' },
     { type: 'primary', action: 'edit', label: 'edit', icon: 'ri-edit-line' },
     { type: 'primary', action: 'message', label: 'message', rawLabel: 'message', icon: 'ri-message-2-line' },
-    { type: 'danger', action: 'cancelBatch', label: 'void', icon: 'ri-delete-bin-line' }
+    { type: 'danger', action: 'cancelBatch', label: 'delete', icon: 'ri-delete-bin-line' }
   ]
 }
 

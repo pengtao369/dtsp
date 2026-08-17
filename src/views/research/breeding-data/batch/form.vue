@@ -360,7 +360,7 @@ const getActionButtons = () => {
   const mode = pageMode.value
   if (mode === 'add' || mode === 'edit') return [{ type: '', label: 'cancel', action: 'cancel' }, { type: 'primary', label: 'save', action: 'save' }]
   if (mode === 'audit') return [{ type: '', label: 'cancel', action: 'cancel' }, { type: 'success', label: 'approve', action: 'approve' }, { type: 'danger', label: 'reject', action: 'reject' }]
-  if (mode === 'view') return [{ type: '', label: 'cancel', action: 'cancel' }, { type: 'primary', label: 'archive', action: 'archive' }, { type: 'danger', label: 'void', action: 'cancelBatch' }]
+  if (mode === 'view') return [{ type: '', label: 'cancel', action: 'cancel' }, { type: 'primary', label: 'archive', action: 'archive' }, { type: 'danger', label: 'delete', action: 'cancelBatch' }]
   return [{ type: '', label: 'cancel', action: 'cancel' }, { type: 'primary', label: 'save', action: 'save' }]
 }
 

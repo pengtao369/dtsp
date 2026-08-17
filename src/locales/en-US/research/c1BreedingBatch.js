@@ -4,7 +4,7 @@ export default {
 
   add: 'Add',
   edit: 'Edit Seed Multiplication Information',
-  delete: 'Void',
+  delete: 'Delete',
   view: 'View Details',
   list: 'Seed Multiplication Information List',
 

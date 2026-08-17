@@ -147,7 +147,7 @@
                         @click="handleVoid(row)"
                         v-if="row.flowStatus !== 'S2' && row.flowStatus !== 'S10'">
                         <i class="ri-delete-bin-line"></i>
-                        <span class="btn-text">{{ $t('common.void') }}</span>
+                        <span class="btn-text">{{ $t('common.delete') }}</span>
                       </el-button>
                     </div>
                   </template>
@@ -221,7 +221,7 @@
                       @click.stop="handleVoid(item)"
                       v-if="item.flowStatus !== 'S2' && item.flowStatus !== 'S10'">
                       <i class="ri-delete-bin-line"></i>
-                      <span class="btn-text">{{ $t('common.void') }}</span>
+                      <span class="btn-text">{{ $t('common.delete') }}</span>
                     </el-button>
                   </div>
                 </div>

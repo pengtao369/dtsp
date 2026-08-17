@@ -305,7 +305,7 @@ const getActionButtons = () => {
     return [
       { type: '', label: 'cancel', action: 'cancel' },
       { type: 'primary', label: 'archive', action: 'archive' },
-      { type: 'danger', label: 'void', action: 'cancelBatch' }
+      { type: 'danger', label: 'delete', action: 'cancelBatch' }
     ]
   }
 

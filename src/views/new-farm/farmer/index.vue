@@ -271,7 +271,7 @@ const importFile = ref(null)
 const rowActionButtons = [
   { type: 'success', action: 'view', label: 'view', icon: 'ri-eye-line' },
   { type: 'primary', action: 'edit', label: 'edit', icon: 'ri-edit-line' },
-  { type: 'danger', action: 'cancelBatch', label: 'void', icon: 'ri-delete-bin-line', text: t('common.void') }
+  { type: 'danger', action: 'cancelBatch', label: 'delete', icon: 'ri-delete-bin-line', text: t('common.delete') }
 ]
 
 // 获取列表数据
@@ -557,4 +557,3 @@ onMounted(() => {
   }
 }
 </style>
-

@@ -877,6 +877,7 @@ import { getFarmerDemandPage } from '@/api/farmerDemand'
 import { useDict } from '@/hooks/useDict'
 import { PageHeader, InfoCard } from '@/components/common'
 import ActionButtons from '@/components/workflow/ActionButtons.vue'
+import { getCurrentDeptCode } from '@/utils/demandHierarchy'
 
 const { getLabelByValue, options } = useDict(['input_type', 'input_category', 'agri_season'])
 const router = useRouter()
@@ -1029,10 +1030,11 @@ const loadApprovedCountForRow = async (row) => {
 const loadData = async () => {
   loading.value = true
   try {
+    const currentDeptCode = getCurrentDeptCode()
     const params = {
       page: pagination.currentPage,
       pageSize: pagination.pageSize,
-      sourceCode:JSON.parse(localStorage.getItem('userInfo')).deptId,
+      sourceCode: currentDeptCode,
       level: '2',
       orderByColumn: 'year',
       isAsc: 'desc'
@@ -1068,9 +1070,10 @@ const confirmAddYear = async () => {
     await addYearFormRef.value.validate()
 
     submitting.value = true
+    const currentDeptCode = getCurrentDeptCode()
     const res = await createVillageDemandSummaryMain({
       year: addYearForm.year,
-      sourceCode: JSON.parse(localStorage.getItem('userInfo')).deptId,
+      sourceCode: currentDeptCode,
       status: '0',
       level: '2',
       creator: JSON.parse(localStorage.getItem('userInfo')).userName,
@@ -1115,10 +1118,11 @@ const handleSubmit = async (row) => {
     )
 
     submitting.value = true
+    const targetCode = row.targetCode || getCurrentDeptCode()
     // 区级汇聚提交
     const res = await aggregateTownInputDemand({
       sourceCode: row.sourceCode,
-      targetCode: row.targetCode,
+      targetCode,
       summaryId: row.id,
       year: row.year,
       level: '1'

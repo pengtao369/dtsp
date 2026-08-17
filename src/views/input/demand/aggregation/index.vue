@@ -315,6 +315,7 @@ import { getApprovedDemandPage } from '@/api/demandAudit'
 import { useDict } from '@/hooks/useDict'
 import { PageHeader, InfoCard } from '@/components/common'
 import ActionButtons from '@/components/workflow/ActionButtons.vue'
+import { getCurrentDeptCode } from '@/utils/demandHierarchy'
 
 const { getLabelByValue, options } = useDict(['input_type', 'input_category', 'agri_season'])
 
@@ -367,8 +368,7 @@ const loadApprovedCountForRow = async (row) => {
     const params = {
       pageNum: 1,
       pageSize: 1,
-      kebele: JSON.parse(localStorage.getItem('userInfo')).deptId
-      ,
+      kebele: row.sourceCode || getCurrentDeptCode(),
       year: row.year
     }
     const res = await getApprovedDemandPage(params)
@@ -544,7 +544,7 @@ const loadData = async () => {
     const params = {
       page: pagination.currentPage, // 修正为 page
       pageSize: pagination.pageSize,
-      sourceCode: JSON.parse(localStorage.getItem('userInfo')).deptId,
+      sourceCode: getCurrentDeptCode(),
       level: '0',
       orderByColumn: 'year',
       isAsc: 'desc'
@@ -582,7 +582,7 @@ const confirmAddYear = async () => {
     submitting.value = true
     const res = await createVillageDemandSummaryMain({
       year: addYearForm.year,
-      sourceCode: JSON.parse(localStorage.getItem('userInfo')).deptId,
+      sourceCode: getCurrentDeptCode(),
       // sourceCode: 'huangshan',
       status: '0',
       level: '0',
@@ -629,9 +629,10 @@ const handleSubmit = async (row) => {
     )
 
     submitting.value = true
+    const targetCode = row.targetCode || getCurrentDeptCode()
     const res = await aggregateVillageInputDemand({
       sourceCode: row.sourceCode,
-      targetCode: row.targetCode,
+      targetCode,
       year: row.year,
       level: '3',
       demandSummaryId: row.id

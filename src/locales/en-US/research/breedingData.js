@@ -66,7 +66,7 @@ export default {
       approve: 'Approve',
       reject: 'Reject',
       archive: 'Archive',
-      void: 'Void'
+      void: 'Delete'
     },
 
     prompt: 'Prompt',

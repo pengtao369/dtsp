@@ -151,7 +151,7 @@ const getDefaultButtons = () => {
     if (['S2', 'S9'].includes(workflowStatus)) {
       buttons.push({ type: '', action: 'cancel', label: 'cancel', icon: 'ri-close-line' })
       buttons.push({ type: 'primary', action: 'archive', label: 'archive', icon: 'ri-archive-line' })
-      buttons.push({ type: 'danger', action: 'cancelBatch', label: 'void', icon: 'ri-delete-bin-line' })
+      buttons.push({ type: 'danger', action: 'cancelBatch', label: 'delete', icon: 'ri-delete-bin-line' })
     }
 
     return buttons
@@ -166,7 +166,7 @@ const getDefaultButtons = () => {
       buttons.push({ type: 'success', action: 'submit', label: 'submit', icon: 'ri-send-plane-line' })
       // 管理页面显示作废按钮，审核页面不显示
       if (!props.showAudit) {
-        buttons.push({ type: 'danger', action: 'cancelBatch', label: 'void', icon: 'ri-delete-bin-line' })
+        buttons.push({ type: 'danger', action: 'cancelBatch', label: 'delete', icon: 'ri-delete-bin-line' })
       }
       break
 
@@ -195,7 +195,7 @@ const getDefaultButtons = () => {
         // 管理页面：显示编辑、提交、作废按钮
         buttons.push({ type: 'primary', action: 'edit', label: 'edit', icon: 'ri-edit-line' })
         buttons.push({ type: 'success', action: 'submit', label: 'submit', icon: 'ri-send-plane-line' })
-        buttons.push({ type: 'danger', action: 'cancelBatch', label: 'void', icon: 'ri-delete-bin-line' })
+        buttons.push({ type: 'danger', action: 'cancelBatch', label: 'delete', icon: 'ri-delete-bin-line' })
       }
       break
 

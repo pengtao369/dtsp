@@ -159,78 +159,79 @@ const systemModules = computed(() => ({
     gradient: 'linear-gradient(135deg, #DA121A 0%, #FF3D47 100%)',
     path: '/input'
   },
-  farm: {
-    name: t('home.modules.farm.name'),
-    desc: t('home.modules.farm.desc'),
-    icon: 'ri-landscape-line',
-    gradient: 'linear-gradient(135deg, #52C41A 0%, #95DE64 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=farmland&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  production: {
-    name: t('home.modules.production.name'),
-    desc: t('home.modules.production.desc'),
-    icon: 'ri-seedling-line',
-    gradient: 'linear-gradient(135deg, #52C41A 0%, #73D13D 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=production&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  procurement: {
-    name: t('home.modules.procurement.name'),
-    desc: t('home.modules.procurement.desc'),
-    icon: 'ri-shopping-cart-line',
-    gradient: 'linear-gradient(135deg, #1890FF 0%, #69C0FF 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=processing&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  traceability: {
-    name: t('home.modules.traceability.name'),
-    desc: t('home.modules.traceability.desc'),
-    icon: 'ri-map-pin-line',
-    gradient: 'linear-gradient(135deg, #722ED1 0%, #B37FEB 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=logistics&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  sustainability: {
-    name: t('home.modules.sustainability.name'),
-    desc: t('home.modules.sustainability.desc'),
-    icon: 'ri-leaf-line',
-    gradient: 'linear-gradient(135deg, #13C2C2 0%, #5CDBD3 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=sustainability&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  harvest: {
-    name: t('home.modules.harvest.name'),
-    desc: t('home.modules.harvest.desc'),
-    icon: 'ri-shopping-basket-line',
-    gradient: 'linear-gradient(135deg, #FA8C16 0%, #FFC069 100%)',
-    path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=harvest&token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  marketing: {
-    name: t('home.modules.marketing.name'),
-    desc: t('home.modules.marketing.desc'),
-    icon: 'ri-line-chart-line',
-    gradient: 'linear-gradient(135deg, #EB2F96 0%, #FF85C0 100%)',
-    path: `http://196.189.236.220:8088/?token=${localStorage.getItem('token') || ''}`,
-    external: true
-  },
-  inventory: {
-    name: t('home.modules.inventory.name'),
-    desc: t('home.modules.inventory.desc'),
-    icon: 'ri-stack-line',
-    gradient: 'linear-gradient(135deg, #FA8C16 0%, #FFC069 100%)',
-    path: '/inventory'
-  },
-  userManagement: {
-    name: t('home.modules.userManagement.name'),
-    desc: t('home.modules.userManagement.desc'),
-    icon: 'ri-user-settings-line',
-    gradient: 'linear-gradient(135deg, #0086F5 0%, #5AA9FF 100%)',
-    path: `http://196.189.236.220:30005/data-service-uc/?token=${localStorage.getItem('token') || ''}`,
-    external: true,
-    newTab: true
-  },
+  // 以下菜单只在30005环境发布的时候关闭
+  // farm: {
+  //   name: t('home.modules.farm.name'),
+  //   desc: t('home.modules.farm.desc'),
+  //   icon: 'ri-landscape-line',
+  //   gradient: 'linear-gradient(135deg, #52C41A 0%, #95DE64 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=farmland&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // production: {
+  //   name: t('home.modules.production.name'),
+  //   desc: t('home.modules.production.desc'),
+  //   icon: 'ri-seedling-line',
+  //   gradient: 'linear-gradient(135deg, #52C41A 0%, #73D13D 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=production&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // procurement: {
+  //   name: t('home.modules.procurement.name'),
+  //   desc: t('home.modules.procurement.desc'),
+  //   icon: 'ri-shopping-cart-line',
+  //   gradient: 'linear-gradient(135deg, #1890FF 0%, #69C0FF 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=processing&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // traceability: {
+  //   name: t('home.modules.traceability.name'),
+  //   desc: t('home.modules.traceability.desc'),
+  //   icon: 'ri-map-pin-line',
+  //   gradient: 'linear-gradient(135deg, #722ED1 0%, #B37FEB 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=logistics&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // sustainability: {
+  //   name: t('home.modules.sustainability.name'),
+  //   desc: t('home.modules.sustainability.desc'),
+  //   icon: 'ri-leaf-line',
+  //   gradient: 'linear-gradient(135deg, #13C2C2 0%, #5CDBD3 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=sustainability&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // harvest: {
+  //   name: t('home.modules.harvest.name'),
+  //   desc: t('home.modules.harvest.desc'),
+  //   icon: 'ri-shopping-basket-line',
+  //   gradient: 'linear-gradient(135deg, #FA8C16 0%, #FFC069 100%)',
+  //   path: `http://196.189.236.220:31100/prod-api/sso/ssoLogin?contextPath=harvest&token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // marketing: {
+  //   name: t('home.modules.marketing.name'),
+  //   desc: t('home.modules.marketing.desc'),
+  //   icon: 'ri-line-chart-line',
+  //   gradient: 'linear-gradient(135deg, #EB2F96 0%, #FF85C0 100%)',
+  //   path: `http://196.189.236.220:8088/?token=${localStorage.getItem('token') || ''}`,
+  //   external: true
+  // },
+  // inventory: {
+  //   name: t('home.modules.inventory.name'),
+  //   desc: t('home.modules.inventory.desc'),
+  //   icon: 'ri-stack-line',
+  //   gradient: 'linear-gradient(135deg, #FA8C16 0%, #FFC069 100%)',
+  //   path: '/inventory'
+  // },
+  // userManagement: {
+  //   name: t('home.modules.userManagement.name'),
+  //   desc: t('home.modules.userManagement.desc'),
+  //   icon: 'ri-user-settings-line',
+  //   gradient: 'linear-gradient(135deg, #0086F5 0%, #5AA9FF 100%)',
+  //   path: `http://196.189.236.220:30005/data-service-uc/?token=${localStorage.getItem('token') || ''}`,
+  //   external: true,
+  //   newTab: true
+  // },
   // farm: {
   //   name: t('home.modules.farm.name'),
   //   desc: t('home.modules.farm.desc'),

@@ -23,7 +23,7 @@ export default {
     view: 'View',
     submit: 'Submit',
     cancel: 'Cancel',
-    void: 'Void',
+    void: 'Delete',
     archive: 'Archive',
     audit: 'Audit',
     delete: 'Delete',

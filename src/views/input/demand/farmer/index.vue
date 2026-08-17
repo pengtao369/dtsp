@@ -245,6 +245,7 @@ import { getFarmerDemandPage, deleteFarmerDemand, submitForAudit } from '@/api/f
 import { PageHeader, InfoCard, SearchForm, SearchItem } from '@/components/common'
 import StatusTabs from '@/components/workflow/StatusTabs.vue'
 import FarmerActionButtons from './components/FarmerActionButtons.vue'
+import { getCurrentUserIdentity, getDemandKebeleCode } from '@/utils/demandHierarchy'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -408,30 +409,17 @@ const rowSelectable = (row) => {
   return row.status === '0' || row.status === '3'
 }
 
-const getSubmitSourceCode = (row) => row?.kebele || ''
-
-const getCurrentUser = () => {
-  try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-    return {
-      currentUserId: userInfo.userId || userInfo.id || userInfo?.userInfo?.user?.id || userInfo?.user?.id || '',
-      currentUserName: userInfo.nickName || userInfo.userName || userInfo?.userInfo?.user?.userName || userInfo?.user?.userName || ''
-    }
-  } catch (error) {
-    return {
-      currentUserId: '',
-      currentUserName: ''
-    }
-  }
-}
+const getSubmitSourceCode = (row) => getDemandKebeleCode(row)
 
 const buildSubmitPayload = (rows) => {
   const sourceCode = getSubmitSourceCode(rows[0])
-  const currentUser = getCurrentUser()
+  const currentUser = getCurrentUserIdentity()
 
   return {
     ids: rows.map(row => row.id),
     sourceCode,
+    kebele: sourceCode,
+    kebeleCode: sourceCode,
     level: KEBELE_LEVEL,
     year: currentYear,
     ...currentUser

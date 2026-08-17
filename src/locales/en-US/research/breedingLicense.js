@@ -149,7 +149,7 @@ export default {
   actions: {
     add: 'Add License',
     edit: 'Edit',
-    delete: 'Void',
+    delete: 'Delete',
     detail: 'View Detail',
     backToList: 'Back to List',
     submit: 'Submit',

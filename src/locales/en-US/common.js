@@ -3,7 +3,7 @@ export default {
   remark: 'Remark',
   cancel: 'Cancel',
   save: 'Save',
-  delete: 'Void',
+  delete: 'Delete',
   void: 'Void',
   edit: 'Edit',
   search: 'Search',

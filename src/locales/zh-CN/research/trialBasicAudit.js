@@ -23,7 +23,7 @@ export default {
     view: '查看',
     submit: '提交',
     cancel: '作废',
-    void: '作废',
+    void: '删除',
     archive: '归档',
     audit: '审核',
     delete: '删除',

@@ -366,6 +366,7 @@ import { listSubRegionByCode } from '@/api/application'
 import { useDict, clearDictCache } from '@/hooks/useDict'
 import { parseI18nValue } from '@/utils/i18nHelper'
 import { InfoCard } from '@/components/common'
+import { withDemandRegionAliases } from '@/utils/demandHierarchy'
 
 const router = useRouter()
 const route = useRoute()
@@ -872,7 +873,7 @@ const handleSubmit = async () => {
       ElMessage.warning(t('common.tips.noUserInfo'))
       return
     }
-    const submitData = {
+    const submitData = withDemandRegionAliases({
       ...formData,
       inputItems: formData.inputItems.map(item => ({
         inputType: getInputTypeName(item.inputType),
@@ -884,7 +885,7 @@ const handleSubmit = async () => {
         unit: item.unit,
         quantity: item.quantity
       }))
-    }
+    })
 
     submitting.value = true
     const apiFunc = isEdit.value ? updateFarmerDemand : addFarmerDemand
